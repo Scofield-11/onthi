@@ -1086,6 +1086,142 @@
                 min-height: 180px;
             }
         }
+
+        /* ================= PROBABILITY BADGE & SORT UI ================= */
+        .toc-header-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sort-prob-btn {
+            border: 1px solid #cbd5e1;
+            background: #ffffff;
+            color: #1e293b;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            white-space: nowrap;
+        }
+
+        .sort-prob-btn:hover {
+            border-color: #2563eb;
+            color: #2563eb;
+            background: #eff6ff;
+        }
+
+        .sort-prob-btn.active-sort {
+            background: #2563eb;
+            color: #ffffff;
+            border-color: #1d4ed8;
+            box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+        }
+
+        /* Badge nhỏ bên phải mỗi mục trên Sidebar (.jump-pill) */
+        .pill-prob-badge {
+            font-size: 11px;
+            font-weight: 800;
+            padding: 2px 6px;
+            border-radius: 6px;
+            border: 1px solid transparent;
+            flex-shrink: 0;
+            line-height: 1.2;
+        }
+
+        .pill-prob-high {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .pill-prob-med {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+
+        .pill-prob-low {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            color: #475569;
+        }
+
+        /* Thanh / Huy hiệu xác suất kèm Progress Bar trên đầu mỗi Problem Card */
+        .prob-chance-banner {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 10px 14px;
+            border-radius: 8px;
+            border: 1.5px solid transparent;
+            margin-top: 6px;
+            margin-bottom: 12px;
+        }
+
+        .prob-chance-high {
+            background: #fef2f2;
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .prob-chance-med {
+            background: #eff6ff;
+            border-color: #3b82f6;
+            color: #1d4ed8;
+        }
+
+        .prob-chance-low {
+            background: #f8fafc;
+            border-color: #94a3b8;
+            color: #475569;
+        }
+
+        .prob-chance-left {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            font-size: 13.5px;
+            font-weight: 700;
+        }
+
+        .prob-chance-pct {
+            font-size: 15px;
+            font-weight: 900;
+            padding: 2px 8px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid currentColor;
+        }
+
+        .prob-chance-note {
+            font-weight: 600;
+            opacity: 0.92;
+        }
+
+        .prob-chance-bar-wrap {
+            width: 150px;
+            height: 8px;
+            background: rgba(15, 23, 42, 0.1);
+            border-radius: 999px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .prob-chance-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width 0.35s ease;
+        }
+
+        .prob-chance-high .prob-chance-bar-fill { background: #ef4444; }
+        .prob-chance-med .prob-chance-bar-fill { background: #3b82f6; }
+        .prob-chance-low .prob-chance-bar-fill { background: #64748b; }
     </style>
 </head>
 <body>
@@ -1096,17 +1232,17 @@
             <div class="page-tabs">
                 <button class="page-btn active" onclick="switchPage(1)" id="btn-page-1">
                     <span class="tab-step">Câu 1</span>
-                    <span>Ghép cặp dây cáp</span>
+                    <span>Ghép cặp dây cáp / Máy bơm</span>
                     <span class="tab-score">5.0đ</span>
                 </button>
                 <button class="page-btn" onclick="switchPage(2)" id="btn-page-2">
                     <span class="tab-step">Câu 2</span>
-                    <span>Kênh dẫn nước tự chảy</span>
+                    <span>Kênh tự chảy / Mực nước</span>
                     <span class="tab-score">3.0đ</span>
                 </button>
                 <button class="page-btn" onclick="switchPage(3)" id="btn-page-3">
                     <span class="tab-step">Câu 3</span>
-                    <span>Xếp toa tàu</span>
+                    <span>Xếp toa tàu / Vận động viên</span>
                     <span class="tab-score">2.0đ</span>
                 </button>
             </div>
@@ -1115,7 +1251,7 @@
                     <circle cx="11" cy="11" r="8"></circle>
                     <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                 </svg>
-                <input type="text" id="live-search" placeholder="Tìm nhanh (vd: chênh nhau, huffman, nghịch thế, cái túi...)" oninput="filterProblems()">
+                <input type="text" id="live-search" placeholder="Tìm nhanh (vd: chênh nhau, lcs, chuyển hàng, cái túi...)" oninput="filterProblems()">
                 <button class="search-clear" id="search-clear-btn" onclick="clearSearch()" title="Xóa tìm kiếm">✕</button>
             </div>
         </div>
@@ -1126,9 +1262,14 @@
         <div class="sidebar-toc-header">
             <span class="jump-label">
                 <span class="toc-icon">☰</span>
-                Mục lục nhanh
+                Mục lục
             </span>
-            <span class="toc-count-badge" id="toc-count-badge">8 dạng</span>
+            <div class="toc-header-right">
+                <button class="sort-prob-btn" id="sort-prob-btn" onclick="toggleSortByProb()" title="Sắp xếp các bài theo % khả năng gặp từ cao xuống thấp">
+                    Sắp xếp theo % gặp ↓
+                </button>
+                <span class="toc-count-badge" id="toc-count-badge">9 dạng</span>
+            </div>
         </div>
         <div class="quick-jump-inner" id="quick-jump-bar">
             <!-- Tự động sinh danh sách mục lục theo trang hiện tại -->
@@ -1212,7 +1353,9 @@
                     </div>
                 </div>
 
-                <!-- VS Code Area -->
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.1] - Ghép cặp dây cáp: Độ dài chênh lệch <= D      -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-1">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -1224,6 +1367,7 @@
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.1 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1260,6 +1404,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.1 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1286,6 +1431,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.1 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -1301,6 +1447,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.1] -->
             </section>
 
             <!-- ==================== TH 1.2 ==================== -->
@@ -1362,6 +1509,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.2] - Ghép cặp dây cáp: Độ dài chênh lệch = K -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-2">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -1373,6 +1523,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.2 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1407,6 +1558,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.2 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1432,6 +1584,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.2 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -1447,6 +1600,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.2] -->
             </section>
 
             <!-- ==================== TH 1.3 ==================== -->
@@ -1473,7 +1627,7 @@ int main() {
                     <h3>Ví dụ</h3>
                     <div class="example-block">5 12
 3 8 5 10 2</div>
-                    <p>Kết quả: <code>4</code> — các cặp độ dài có tổng <code>≥ 12</code> là <code>(2,10)</code>, <code>(3,10)</code>, <code>(5,8)</code>, <code>(5,10)</code>, <code>(8,10)</code>? Kiểm tra lại: <code>2+10=12</code>, <code>3+10=13</code>, <code>5+8=13</code>, <code>5+10=15</code>, <code>8+10=18</code> → tất cả là <code>5</code> cặp.</p>
+                    <p>Kết quả: <code>5</code> — các cặp độ dài có tổng <code>≥ 12</code> là <code>(2,10)</code>, <code>(3,10)</code>, <code>(5,8)</code>, <code>(5,10)</code>, <code>(8,10)</code>.</p>
 
                     <h3>Test mẫu</h3>
                     <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
@@ -1509,6 +1663,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.3] - Ghép cặp dây cáp: Tổng độ dài >= K -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-3">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -1520,6 +1677,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.3 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1555,6 +1713,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.3 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1578,6 +1737,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.3 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -1593,6 +1753,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.3] -->
             </section>
 
             <!-- ==================== TH 1.4 ==================== -->
@@ -1655,6 +1816,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.4] - Ghép cặp dây cáp: Ghép cặp rời nhau tối đa -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-4">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -1666,6 +1830,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.4 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1715,6 +1880,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.4 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1756,6 +1922,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.4 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -1771,6 +1938,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.4] -->
             </section>
 
             <!-- ==================== TH 1.5 ==================== -->
@@ -1798,7 +1966,7 @@ int main() {
                     <div class="example-block">4
 10 2 8 5
 6 1 9 4</div>
-                    <p>Kết quả: <code>4</code> — sắp xếp <code>A = [2, 5, 8, 10]</code> và <code>B = [1, 4, 6, 9]</code>, ghép tương ứng từng vị trí được tổng độ lệch <code>|2-1| + |5-4| + |8-6| + |10-9| = 1 + 1 + 2 + 1 = 5</code>? Kiểm tra: <code>1 + 1 + 2 + 1 = 5</code>.</p>
+                    <p>Kết quả: <code>5</code> — sắp xếp <code>A = [2, 5, 8, 10]</code> và <code>B = [1, 4, 6, 9]</code>, ghép tương ứng từng vị trí được tổng độ lệch <code>|2-1| + |5-4| + |8-6| + |10-9| = 1 + 1 + 2 + 1 = 5</code>.</p>
 
                     <h3>Test mẫu</h3>
                     <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
@@ -1835,6 +2003,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.5] - Ghép cặp dây cáp: Ghép 1-1 giữa 2 tập cáp A, B -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-5">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -1846,6 +2017,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.5 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1885,6 +2057,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.5 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -1922,6 +2095,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.5 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -1937,6 +2111,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.5] -->
             </section>
 
             <!-- ==================== TH 1.6 ==================== -->
@@ -1999,6 +2174,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.6] - Ghép cặp dây cáp: Nối cáp chi phí Min (Huffman) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-6">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -2010,6 +2188,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.6 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2046,6 +2225,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.6 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2071,6 +2251,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.6 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -2086,6 +2267,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.6] -->
             </section>
 
             <!-- ==================== TH 1.7 ==================== -->
@@ -2148,6 +2330,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.7] - Ghép cặp dây cáp: Đếm cặp cáp cắt nhau (Nghịch thế) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-7">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -2159,6 +2344,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.7 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2202,6 +2388,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.7 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2223,6 +2410,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.7 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -2238,6 +2426,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.7] -->
             </section>
 
             <!-- ==================== TH 1.8 ==================== -->
@@ -2299,6 +2488,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.8] - Ghép cặp dây cáp: Bó K cáp đồng đều / Chặt nhị phân -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-1-8">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -2310,6 +2502,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.8 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2337,6 +2530,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-1.8 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2383,6 +2577,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-1.8 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -2398,16 +2593,181 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-1.8] -->
+            </section>
+
+            <!-- ==================== TH 1.9 (MỚI BỔ SUNG) ==================== -->
+            <section class="problem-card" id="th-1-9" data-label="TH 1.9: Cân bằng tải N/2 cặp & Đóng gói ≤ K" data-keywords="ghep cap can bang tai trong dong goi 2 phan tu vao ong bao ve nho hon hoac bang k">
+                <div class="prob-breadcrumb">ĐỐI CHIẾU CA 1 & CA 2 · THIB-0 (DẠNG 1.9 - GHÉP CẶP CÂN BẰNG TẢI TRỌNG & ĐÓNG GÓI TỐI ĐA 2 PHẦN TỬ ≤ K)</div>
+                <h1 class="prob-title">Ghép cặp dây cáp / Máy bơm (TH 1.9: Cân bằng tải N/2 cặp & Đóng gói cặp ≤ K)</h1>
+                <div class="prob-limits">Giới hạn 0.5 giây mỗi test · bộ nhớ 256 MB · 10 test · tối đa 100.0 điểm.</div>
+                <div class="prob-Weight"><strong>Bài này 5 điểm</strong> trong tổng 10 điểm của đề. Điểm thang 100 của bài được quy tỉ lệ về số điểm này.</div>
+
+                <div class="prob-white-box">
+                    <p>Trường hợp dự phòng quan trọng kết hợp cả ngữ cảnh <strong>Ghép cặp máy bơm (Ca 1)</strong> và <strong>Ghép cặp dây cáp (Ca 2)</strong> với 2 biến thể tham lam 2 con trỏ cực kỳ phổ biến:</p>
+                    <ul>
+                        <li><strong>Biến thể 1 (Tab 1 - Ghép N/2 cặp cân bằng tải trọng):</strong> Có <code>N</code> máy bơm / dây cáp (<code>N</code> chẵn), phần tử thứ <code>i</code> có công suất / độ dài <code>Aᵢ</code>. Cần chia hết <code>N</code> phần tử thành <code>N/2</code> cặp rời nhau sao cho <strong>tổng công suất lớn nhất của một cặp là nhỏ nhất có thể</strong> (tránh quá tải đường dây).</li>
+                        <li><strong>Biến thể 2 (Tab 2 - Đóng gói tối đa 2 phần tử vào 1 cụm ≤ K):</strong> Mỗi ống bảo vệ / tủ điện có tải trọng tối đa <code>K</code> và chứa được <strong>tối đa 2</strong> sợi cáp / máy bơm. Tìm <strong>số lượng ống / cụm ít nhất</strong> cần dùng để chứa hết <code>N</code> phần tử.</li>
+                    </ul>
+
+                    <h3>Dữ liệu vào (Minh họa Biến thể 1)</h3>
+                    <ul>
+                        <li>Dòng 1: Số nguyên dương chẵn <code>N</code> (<code>2 ≤ N ≤ 200 000</code>).</li>
+                        <li>Dòng 2: <code>N</code> số nguyên dương <code>A₁, A₂, ..., Aₙ</code> (<code>1 ≤ Aᵢ ≤ 10⁹</code>).</li>
+                    </ul>
+
+                    <h3>Kết quả ra</h3>
+                    <p>Một số nguyên kiểu <code>long long</code> — tổng lớn nhất của một cặp sau khi đã tối ưu (Biến thể 1) hoặc số cụm ít nhất cần dùng (Biến thể 2).</p>
+
+                    <h3>Ví dụ (Biến thể 1)</h3>
+                    <div class="example-block">6
+3 5 2 3 8 4</div>
+                    <p>Kết quả: <code>10</code> — Sau khi sắp xếp <code>[2, 3, 3, 4, 5, 8]</code>, ghép đầu-cuối: <code>(2,8)=10</code>, <code>(3,5)=8</code>, <code>(3,4)=7</code>. Tổng lớn nhất trong các cặp là <code>10</code> (nhỏ nhất có thể).</p>
+
+                    <h3>Test mẫu</h3>
+                    <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
+
+                    <div class="io-grid">
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">GÕ VÀO</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">6
+3 5 2 3 8 4</div>
+                        </div>
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">PHẢI IN RA</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">10</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Biểu điểm:</strong> nộp <strong>một chương trình</strong>, điểm tuỳ vào nó chạy đúng tới cỡ dữ liệu nào:</p>
+                    <ul>
+                        <li><strong>3 điểm</strong> nếu chạy đúng các bộ có <code>N ≤ 1 000</code></li>
+                        <li><strong>đủ 5 điểm</strong> nếu chạy đúng cả các bộ có <code>N</code> tới <code>200 000</code></li>
+                    </ul>
+
+                    <div class="algo-hint-box">
+                        <strong>💡 Gợi ý thuật toán & Bẫy cần tránh:</strong><br>
+                        • <strong>Tab 1 (Chia N/2 cặp cân bằng tải):</strong> Sắp xếp mảng tăng dần. Luôn ghép phần tử nhỏ thứ <code>i</code> là <code>a[i]</code> với phần tử lớn thứ <code>i</code> là <code>a[n - 1 - i]</code>. Cập nhật <code>ans = max(ans, a[i] + a[n - 1 - i])</code>.<br>
+                        • <strong>Tab 2 (Đóng gói tối đa 2 phần tử ≤ K):</strong> Sắp xếp tăng dần, đặt 2 con trỏ <code>l = 0, r = n - 1</code>. Nếu <code>a[l] + a[r] <= K</code> thì ghép đôi <code>(l++, r--)</code>; ngược lại <code>a[r]</code> phải đi một mình <code>(r--)</code>. Mỗi bước tăng số cụm thêm <code>1</code>.
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-1.9] - Ghép cặp cân bằng tải & Đóng gói <= K        -->
+                <!-- ================================================================= -->
+                <div class="vscode-window" data-prob-id="th-1-9">
+                    <div class="vscode-titlebar">
+                        <div class="vscode-tabs">
+                            <button class="vscode-tab active" onclick="switchCodeTab(this, 0)"><span class="cpp-icon">C++</span> Tab 1: Ghép N/2 Cặp Cân Bằng Tải (O(N log N))</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 1)"><span class="cpp-icon">C++</span> Tab 2: Đóng Gói Tối Đa 2 Phần Tử ≤ K</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 2)">📝 Ghi chú & Code của tôi</button>
+                        </div>
+                        <div class="vscode-actions">
+                            <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
+                        </div>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-1.9 | TAB-1 | GHÉP N/2 CẶP CÂN BẰNG TẢI] -->
+                    <div class="vscode-pane active">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// TAB 1: Chia N phần tử (N chẵn) thành N/2 cặp sao cho tổng lớn nhất của 1 cặp là NHỎ NHẤT
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n;
+    if (!(cin >> n)) return 0;
+
+    vector<long long> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    sort(a.begin(), a.end());
+
+    long long max_pair_sum = 0;
+    for (int i = 0; i < n / 2; i++) {
+        max_pair_sum = max(max_pair_sum, a[i] + a[n - 1 - i]);
+    }
+
+    cout << max_pair_sum << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-1.9 | TAB-2 | ĐÓNG GÓI TỐI ĐA 2 PHẦN TỬ <= K] -->
+                    <div class="vscode-pane">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// TAB 2: Đóng gói tối đa 2 sợi cáp / máy bơm vào 1 cụm có tải trọng <= K
+// sao cho số cụm cần dùng là ÍT NHẤT
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n;
+    long long k;
+    if (!(cin >> n >> k)) return 0;
+
+    vector<long long> a(n);
+    for (int i = 0; i < n; i++) {
+        cin >> a[i];
+    }
+
+    sort(a.begin(), a.end());
+
+    int l = 0, r = n - 1;
+    int so_cum = 0;
+    while (l <= r) {
+        if (l < r && a[l] + a[r] <= k) {
+            // Ghép phần tử nhẹ nhất với phần tử nặng nhất thành 1 cặp
+            l++;
+            r--;
+        } else {
+            // Phần tử nặng nhất đi một mình 1 cụm
+            r--;
+        }
+        so_cum++;
+    }
+
+    cout << so_cum << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-NOTE: TH-1.9 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
+                    <div class="vscode-pane">
+                        <div class="user-code-area">
+                            <div class="user-code-toolbar">
+                                <span class="save-status">✔ Tự động lưu vào trình duyệt (LocalStorage)</span>
+                                <div>
+                                    <button class="vscode-btn secondary" onclick="downloadUserCode(this, 'THIB0_TH1_9.cpp')">Tải file .cpp</button>
+                                    <button class="vscode-btn danger" onclick="clearUserCode(this)">Xóa</button>
+                                </div>
+                            </div>
+                            <textarea class="user-textarea" placeholder="// Dán hoặc gõ code C++ của bạn vào đây để lưu trữ ôn tập..."></textarea>
+                            <div class="preview-label">Xem trước code tô màu cú pháp:</div>
+                            <pre><code class="language-cpp user-code-preview">// Chưa có code ghi chú...</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- @[END-CPP: TH-1.9] -->
             </section>
 
         </div>
 
         <!-- ========================================================================= -->
-        <!-- TRANG 2: KÊNH DẪN NƯỚC TỰ CHẢY (THIB-2 | 3.0 ĐIỂM | 6 TRƯỜNG HỢP)         -->
+        <!-- TRANG 2: KÊNH DẪN NƯỚC TỰ CHẢY (THIB-2 | 3.0 ĐIỂM | 8 TRƯỜNG HỢP)         -->
         <!-- ========================================================================= -->
         <div id="page-2" class="page-section" style="display:none;">
             <!-- CHÈN NỘI DUNG PHIÊN 2 TẠI ĐÂY -->
-             <!-- ==================== TH 2.1 ==================== -->
+            <!-- ==================== TH 2.1 ==================== -->
             <section class="problem-card" id="th-2-1" data-label="TH 2.1: Dãy trạm tự chảy (LIS O(N²))" data-keywords="day tram tu chay do cao giam dan tang dan lis qhd quy hoach dong truy vet quay lui">
                 <div class="prob-breadcrumb">THI HẾT MÔN - CA 2, PHÒNG 301 C5 · THIB-2 (DẠNG 2.1 - QUY HOẠCH ĐỘNG DÃY CON ĐƠN ĐIỆU &amp; TRUY VẾT)</div>
                 <h1 class="prob-title">Kênh dẫn nước tự chảy (TH 2.1: Tuyến trạm dọc sườn đồi)</h1>
@@ -2467,6 +2827,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.1] - Kênh dẫn nước tự chảy: Dãy trạm tự chảy (LIS O(N²)) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-2-1">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -2478,6 +2841,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.1 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2536,6 +2900,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.1 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2569,6 +2934,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-2.1 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -2584,6 +2950,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-2.1] -->
             </section>
 
             <!-- ==================== TH 2.2 ==================== -->
@@ -2659,6 +3026,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.2] - Kênh dẫn nước tự chảy: Đường kênh dài nhất trên DAG -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-2-2">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -2670,6 +3040,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.2 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2732,6 +3103,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.2 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2779,6 +3151,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-2.2 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -2794,6 +3167,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-2.2] -->
             </section>
 
             <!-- ==================== TH 2.3 ==================== -->
@@ -2865,6 +3239,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.3] - Kênh dẫn nước tự chảy: Chọn đỉnh đặt hồ chứa (DFS/BFS) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-2-3">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -2876,6 +3253,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.3 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2930,6 +3308,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.3 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -2984,6 +3363,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-2.3 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -2999,6 +3379,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-2.3] -->
             </section>
 
             <!-- ==================== TH 2.4 ==================== -->
@@ -3067,6 +3448,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.4] - Kênh dẫn nước tự chảy: Phân phối lưu lượng (Cái túi 0-1) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-2-4">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -3078,6 +3462,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.4 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3125,6 +3510,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.4 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3154,6 +3540,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-2.4 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -3169,6 +3556,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-2.4] -->
             </section>
 
             <!-- ==================== TH 2.5 ==================== -->
@@ -3237,6 +3625,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.5] - Kênh dẫn nước tự chảy: Kênh tự chảy trên lưới ô vuông -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-2-5">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -3248,6 +3639,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.5 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3308,6 +3700,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.5 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3340,6 +3733,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-2.5 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -3355,6 +3749,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-2.5] -->
             </section>
 
             <!-- ==================== TH 2.6 ==================== -->
@@ -3386,7 +3781,7 @@ int main() {
 1 3
 2 4
 2 5</div>
-                    <p>Kết quả: <code>80</code> — Mở van tại các trạm <code>{3, 4, 5}</code> (và có thể thêm trạm <code>1</code> nếu không kề <code>4, 5</code>; kiểm tra: trạm <code>1</code> kề <code>3</code> nên chỉ chọn <code>{3, 4, 5}</code> được <code>15 + 30 + 25 = 70</code>, hoặc chọn <code>{1, 4, 5}</code> được <code>10 + 30 + 25 = 65</code>? Chờ đã: trạm <code>3</code> chỉ nối với <code>1</code>, trạm <code>4, 5</code> nối với <code>2</code> → chọn <code>{3, 4, 5}</code> không ai kề nhau được <code>15 + 30 + 25 = 70</code>!). <em>(Đã chuẩn hóa bộ test mẫu bên dưới).</em></p>
+                    <p>Kết quả: <code>70</code> — Mở van tại các trạm <code>{3, 4, 5}</code> không kề nhau, tổng lưu lượng đạt <code>15 + 30 + 25 = 70</code>.</p>
 
                     <h3>Test mẫu</h3>
                     <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
@@ -3427,6 +3822,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.6] - Kênh dẫn nước tự chảy: QHĐ trên Cây kênh dẫn nước -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-2-6">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -3438,6 +3836,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.6 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3482,6 +3881,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-2.6 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3529,6 +3929,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-2.6 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -3544,11 +3945,395 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-2.6] -->
+            </section>
+
+            <!-- ==================== TH 2.7 (MỚI BỔ SUNG) ==================== -->
+            <section class="problem-card" id="th-2-7" data-label="TH 2.7: Đối chiếu 2 chuỗi mực nước (LCS O(N²))" data-keywords="doi chieu 2 ban bao cao muc nuoc 2 tuyen kenh day con chung dai nhat lcs chuong 5">
+                <div class="prob-breadcrumb">ĐỐI CHIẾU CA 1 & CA 2 · THIB-2 (DẠNG 2.7 - DÃY CON CHUNG DÀI NHẤT LCS - MỤC 5.2 CHƯƠNG 5)</div>
+                <h1 class="prob-title">Kênh tự chảy / Mực nước (TH 2.7: Đối chiếu 2 chuỗi mực nước / 2 tuyến kênh - LCS)</h1>
+                <div class="prob-limits">Giới hạn 0.5 giây mỗi test · bộ nhớ 256 MB · 10 test · tối đa 100.0 điểm.</div>
+                <div class="prob-Weight"><strong>Bài này 3 điểm</strong> trong tổng 10 điểm của đề. Điểm thang 100 của bài được quy tỉ lệ về số điểm này.</div>
+
+                <div class="prob-white-box">
+                    <p>Trạm thủy văn thu thập hai bản báo cáo mực nước (hoặc cao độ của 2 tuyến kênh song song): chuỗi thứ nhất gồm <code>M</code> số liệu <code>A₁, A₂, ..., Aₘ</code> và chuỗi thứ hai gồm <code>N</code> số liệu <code>B₁, B₂, ..., Bₙ</code>.</p>
+                    <p>Để kiểm định độ đồng bộ giữa hai trạm đo, kỹ sư cần tìm một <strong>dãy con chung dài nhất</strong> (các phần tử xuất hiện theo đúng thứ tự tương đối ở cả hai bản báo cáo nhưng không nhất thiết phải đứng liền kề nhau).</p>
+                    <p>Hãy tìm độ dài lớn nhất của dãy số liệu trùng khớp giữa hai bản báo cáo.</p>
+
+                    <h3>Dữ liệu vào</h3>
+                    <ul>
+                        <li>Dòng 1: Hai số nguyên dương <code>M</code> và <code>N</code> (<code>1 ≤ M, N ≤ 2 000</code>).</li>
+                        <li>Dòng 2: <code>M</code> số nguyên <code>A₁, A₂, ..., Aₘ</code> (<code>1 ≤ Aᵢ ≤ 10⁹</code>).</li>
+                        <li>Dòng 3: <code>N</code> số nguyên <code>B₁, B₂, ..., Bₙ</code> (<code>1 ≤ Bⱼ ≤ 10⁹</code>).</li>
+                    </ul>
+
+                    <h3>Kết quả ra</h3>
+                    <p>Một số nguyên — độ dài của dãy con chung dài nhất (LCS).</p>
+
+                    <h3>Ví dụ</h3>
+                    <div class="example-block">5 6
+2 5 8 3 9
+1 2 8 5 3 9</div>
+                    <p>Kết quả: <code>4</code> — dãy con chung dài nhất là <code>(2, 8, 3, 9)</code> hoặc <code>(2, 5, 3, 9)</code> có độ dài <code>4</code>.</p>
+
+                    <h3>Test mẫu</h3>
+                    <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
+
+                    <div class="io-grid">
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">GÕ VÀO</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">5 6
+2 5 8 3 9
+1 2 8 5 3 9</div>
+                        </div>
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">PHẢI IN RA</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">4</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Biểu điểm:</strong> nộp <strong>một chương trình</strong>, điểm tuỳ vào nó chạy đúng tới cỡ dữ liệu nào:</p>
+                    <ul>
+                        <li><strong>1,5 điểm</strong> nếu chạy đúng các bộ có <code>M, N ≤ 18</code></li>
+                        <li><strong>đủ 3 điểm</strong> nếu chạy đúng cả các bộ có <code>M, N</code> tới <code>2 000</code></li>
+                    </ul>
+
+                    <div class="algo-hint-box">
+                        <strong>💡 Gợi ý thuật toán & Bẫy cần tránh (Chuẩn Slide 11 Chương 5):</strong><br>
+                        • Gọi <code>S[p][q]</code> là độ dài dãy con chung dài nhất của <code>p</code> phần tử đầu dãy <code>A</code> và <code>q</code> phần tử đầu dãy <code>B</code>.<br>
+                        • Nếu <code>A[p] == B[q]</code> thì <code>S[p][q] = S[p - 1][q - 1] + 1</code>; ngược lại <code>S[p][q] = max(S[p - 1][q], S[p][q - 1])</code>. Độ phức tạp <code>O(M × N)</code>.
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.7] - Dãy con chung dài nhất LCS O(M*N)            -->
+                <!-- ================================================================= -->
+                <div class="vscode-window" data-prob-id="th-2-7">
+                    <div class="vscode-titlebar">
+                        <div class="vscode-tabs">
+                            <button class="vscode-tab active" onclick="switchCodeTab(this, 0)"><span class="cpp-icon">C++</span> Tab 1: QHĐ Bảng 2 Chiều S[p][q] O(M*N) + Truy vết</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 1)"><span class="cpp-icon">C++</span> Tab 2: Quay Lui Nhị Phân O(2^N) (Subtask 1: N ≤ 18)</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 2)">📝 Ghi chú & Code của tôi</button>
+                        </div>
+                        <div class="vscode-actions">
+                            <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
+                        </div>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.7 | TAB-1 | QHĐ LCS O(M*N) + TRUY VẾT] -->
+                    <div class="vscode-pane active">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int m, n;
+    // Lưu ý: Nếu đề chỉ cho 1 số nguyên N (2 dãy cùng độ dài N),
+    // bạn chỉ cần sửa dòng dưới thành: if (!(cin >> n)) return 0; m = n;
+    if (!(cin >> m >> n)) return 0;
+
+    vector<long long> A(m + 1), B(n + 1);
+    for (int i = 1; i <= m; i++) cin >> A[i];
+    for (int j = 1; j <= n; j++) cin >> B[j];
+
+    // Bảng QHĐ S[p][q] chuẩn Mục 5.2 Chương 5
+    vector<vector<int>> S(m + 1, vector<int>(n + 1, 0));
+
+    for (int p = 1; p <= m; p++) {
+        for (int q = 1; q <= n; q++) {
+            if (A[p] == B[q]) {
+                S[p][q] = S[p - 1][q - 1] + 1;
+            } else {
+                S[p][q] = max(S[p - 1][q], S[p][q - 1]);
+            }
+        }
+    }
+
+    cout << S[m][n] << "\n";
+
+    /* --- BỎ COMMENT NẾU ĐỀ YÊU CẦU TRUY VẾT IN RA DÃY CON CHUNG ---
+    vector<long long> lcs;
+    int p = m, q = n;
+    while (p > 0 && q > 0) {
+        if (A[p] == B[q]) {
+            lcs.push_back(A[p]);
+            p--;
+            q--;
+        } else if (S[p - 1][q] >= S[p][q - 1]) {
+            p--;
+        } else {
+            q--;
+        }
+    }
+    reverse(lcs.begin(), lcs.end());
+    for (long long x : lcs) cout << x << " ";
+    cout << "\n";
+    ----------------------------------------------------------------- */
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.7 | TAB-2 | QUAY LUI SUBTASK 1 (N <= 18)] -->
+                    <div class="vscode-pane">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// Quay lui O(2^M) cho Subtask 1 (M, N <= 18)
+int m, n, ans = 0;
+long long A[25], B[25];
+
+void Try(int idxA, int lastB, int len) {
+    if (idxA > m) {
+        ans = max(ans, len);
+        return;
+    }
+    // Nhánh 1: Không chọn A[idxA]
+    Try(idxA + 1, lastB, len);
+
+    // Nhánh 2: Tìm vị trí đầu tiên trong B sau lastB mà B[j] == A[idxA]
+    for (int j = lastB + 1; j <= n; j++) {
+        if (B[j] == A[idxA]) {
+            Try(idxA + 1, j, len + 1);
+            break; // Tham lam lấy vị trí khớp sớm nhất bên B
+        }
+    }
+}
+
+int main() {
+    cin >> m >> n;
+    for (int i = 1; i <= m; i++) cin >> A[i];
+    for (int j = 1; j <= n; j++) cin >> B[j];
+
+    Try(1, 0, 0);
+    cout << ans << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-NOTE: TH-2.7 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
+                    <div class="vscode-pane">
+                        <div class="user-code-area">
+                            <div class="user-code-toolbar">
+                                <span class="save-status">✔ Tự động lưu vào trình duyệt (LocalStorage)</span>
+                                <div>
+                                    <button class="vscode-btn secondary" onclick="downloadUserCode(this, 'THIB2_TH2_7.cpp')">Tải file .cpp</button>
+                                    <button class="vscode-btn danger" onclick="clearUserCode(this)">Xóa</button>
+                                </div>
+                            </div>
+                            <textarea class="user-textarea" placeholder="// Dán hoặc gõ code C++ của bạn vào đây để lưu trữ ôn tập..."></textarea>
+                            <div class="preview-label">Xem trước code tô màu cú pháp:</div>
+                            <pre><code class="language-cpp user-code-preview">// Chưa có code ghi chú...</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- @[END-CPP: TH-2.7] -->
+            </section>
+
+            <!-- ==================== TH 2.8 (MỚI BỔ SUNG) ==================== -->
+            <section class="problem-card" id="th-2-8" data-label="TH 2.8: Chia 2 nhóm chênh lệch Min (CH2-05)" data-keywords="chia luu luong kenh muc nuoc thanh 2 nhom chenh lech nho nhat chuyen hang ch2-05">
+                <div class="prob-breadcrumb">ĐỐI CHIẾU CA 1 & CA 2 · THIB-2 (DẠNG 2.8 - CHIA 2 NHÓM CHÊNH LỆCH NHỎ NHẤT - CH2-05 & BÀI CHUYỂN HÀNG)</div>
+                <h1 class="prob-title">Kênh tự chảy / Mực nước (TH 2.8: Chia lưu lượng thành 2 nhánh chênh lệch nhỏ nhất)</h1>
+                <div class="prob-limits">Giới hạn 0.5 giây mỗi test · bộ nhớ 256 MB · 10 test · tối đa 100.0 điểm.</div>
+                <div class="prob-Weight"><strong>Bài này 3 điểm</strong> trong tổng 10 điểm của đề. Điểm thang 100 của bài được quy tỉ lệ về số điểm này.</div>
+
+                <div class="prob-white-box">
+                    <p>Từ đập chính có <code>N</code> nguồn nước / trạm xả (nguồn thứ <code>i</code> có lưu lượng <code>Wᵢ</code>). Kỹ sư cần phân bổ tất cả <code>N</code> nguồn này vào <strong>2 nhánh kênh lớn (Nhánh Đông và Nhánh Tây)</strong> sao cho mỗi nguồn thuộc đúng 1 nhánh và <strong>độ chênh lệch tổng lưu lượng giữa 2 nhánh là nhỏ nhất có thể</strong>.</p>
+                    <p>Đây chính là mô hình bài toán <strong>Chia tập hợp thành 2 phần chênh lệch nhỏ nhất (CH2-05)</strong> và bài <strong>Chuyển hàng trong `de.pdf`</strong>.</p>
+
+                    <h3>Dữ liệu vào</h3>
+                    <ul>
+                        <li>Dòng 1: Số nguyên dương <code>N</code> (<code>1 ≤ N ≤ 2 000</code>).</li>
+                        <li>Dòng 2: <code>N</code> số nguyên dương <code>W₁, W₂, ..., Wₙ</code>.</li>
+                    </ul>
+
+                    <h3>Kết quả ra</h3>
+                    <p>Một số nguyên kiểu <code>long long</code> — độ chênh lệch tổng lưu lượng nhỏ nhất giữa 2 nhánh.</p>
+
+                    <h3>Ví dụ</h3>
+                    <div class="example-block">5
+3 8 4 6 5</div>
+                    <p>Kết quả: <code>0</code> — Tổng lưu lượng là <code>26</code>. Chia thành Nhánh 1 gồm <code>{8, 5}</code> (tổng <code>13</code>) và Nhánh 2 gồm <code>{3, 4, 6}</code> (tổng <code>13</code>), độ chênh lệch bằng <code>|13 - 13| = 0</code>.</p>
+
+                    <h3>Test mẫu</h3>
+                    <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
+
+                    <div class="io-grid">
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">GÕ VÀO</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">5
+3 8 4 6 5</div>
+                        </div>
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">PHẢI IN RA</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">0</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Biểu điểm:</strong> nộp <strong>một chương trình</strong>, điểm tuỳ vào nó chạy đúng tới cỡ dữ liệu nào:</p>
+                    <ul>
+                        <li><strong>1,5 điểm</strong> nếu chạy đúng các bộ có <code>N ≤ 18</code></li>
+                        <li><strong>đủ 3 điểm</strong> nếu chạy đúng cả các bộ có <code>N</code> tới <code>2 000</code></li>
+                    </ul>
+
+                    <div class="algo-hint-box">
+                        <strong>💡 Gợi ý thuật toán & Bẫy cần tránh:</strong><br>
+                        • <strong>Tab 1 (Quy hoạch động tổng tập con <code>dp[s]</code>):</strong> Gọi <code>S</code> là tổng cả <code>N</code> phần tử. Tìm tổng tập con <code>s ≤ S/2</code> lớn nhất đạt được, khi đó độ chênh lệch nhỏ nhất là <code>S - 2*s</code>.<br>
+                        • <strong>Tab 2 (Quay lui nhị phân chuẩn <code>CH2-05</code> & <code>chuyen_hang.cpp</code> cho <code>N ≤ 18</code>):</strong> Cố định phần tử đầu tiên vào Nhánh 1 để giảm một nửa số trạng thái, kết hợp nhánh cận <code>O(2^(N-1))</code> chạy cực nhanh kể cả khi <code>Wᵢ</code> lên tới <code>10⁹</code>!
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.8] - Chia 2 nhóm chênh lệch nhỏ nhất (CH2-05)     -->
+                <!-- ================================================================= -->
+                <div class="vscode-window" data-prob-id="th-2-8">
+                    <div class="vscode-titlebar">
+                        <div class="vscode-tabs">
+                            <button class="vscode-tab active" onclick="switchCodeTab(this, 0)"><span class="cpp-icon">C++</span> Tab 1: QHĐ Đánh Dấu Tổng Tập Con dp[s] + Truy vết</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 1)"><span class="cpp-icon">C++</span> Tab 2: Quay Lui Cố Định Phần Tử Đầu (Chuẩn CH2-05)</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 2)">📝 Ghi chú & Code của tôi</button>
+                        </div>
+                        <div class="vscode-actions">
+                            <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
+                        </div>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.8 | TAB-1 | QHĐ TỔNG TẬP CON + TRUY VẾT] -->
+                    <div class="vscode-pane active">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n;
+    if (!(cin >> n)) return 0;
+
+    vector<long long> w(n + 1);
+    long long S = 0;
+    for (int i = 1; i <= n; i++) {
+        cin >> w[i];
+        S += w[i];
+    }
+
+    long long half = S / 2;
+    // dp[s] = chỉ số phần tử vừa thêm để tạo ra tổng s (0 nếu chưa tạo được)
+    vector<int> dp(half + 1, 0);
+    dp[0] = -1;
+
+    for (int i = 1; i <= n; i++) {
+        for (long long s = half; s >= w[i]; s--) {
+            if (dp[s] == 0 && dp[s - w[i]] != 0) {
+                dp[s] = i;
+            }
+        }
+    }
+
+    long long best_s = 0;
+    for (long long s = half; s >= 0; s--) {
+        if (dp[s] != 0) {
+            best_s = s;
+            break;
+        }
+    }
+
+    // Độ chênh lệch nhỏ nhất giữa 2 nhóm
+    cout << (S - 2 * best_s) << "\n";
+
+    /* --- BỎ COMMENT NẾU ĐỀ YÊU CẦU TRUY VẾT IN RA 2 NHÓM ---
+    vector<bool> in_group1(n + 1, false);
+    long long cur = best_s;
+    while (cur > 0) {
+        int idx = dp[cur];
+        in_group1[idx] = true;
+        cur -= w[idx];
+    }
+    for (int i = 1; i <= n; i++) if (in_group1[i]) cout << i << " ";
+    cout << "\n";
+    ---------------------------------------------------------- */
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.8 | TAB-2 | QUAY LUI CHUẨN CH2-05 & CHUYEN_HANG.CPP] -->
+                    <div class="vscode-pane">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// Chuẩn bài CH2-05 & chuyen_hang.cpp: Quay lui cố định phần tử đầu tiên + Nhánh cận
+int n;
+long long w[25], S = 0, best_diff = LLONG_MAX;
+int x[25], best_x[25];
+
+void Try(int i, long long sum1) {
+    if (i > n) {
+        long long sum2 = S - sum1;
+        long long diff = llabs(sum1 - sum2);
+        if (diff < best_diff) {
+            best_diff = diff;
+            for (int k = 1; k <= n; k++) best_x[k] = x[k];
+        }
+        return;
+    }
+
+    // Nhánh 1: Đưa w[i] vào Nhóm 1
+    x[i] = 1;
+    Try(i + 1, sum1 + w[i]);
+
+    // Nhánh 2: Đưa w[i] vào Nhóm 2
+    x[i] = 2;
+    Try(i + 1, sum1);
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    if (!(cin >> n)) return 0;
+    for (int i = 1; i <= n; i++) {
+        cin >> w[i];
+        S += w[i];
+    }
+
+    // Cố định phần tử đầu tiên w[1] luôn thuộc Nhóm 1 để giảm 1/2 không gian duyệt
+    x[1] = 1;
+    Try(2, w[1]);
+
+    cout << best_diff << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-NOTE: TH-2.8 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
+                    <div class="vscode-pane">
+                        <div class="user-code-area">
+                            <div class="user-code-toolbar">
+                                <span class="save-status">✔ Tự động lưu vào trình duyệt (LocalStorage)</span>
+                                <div>
+                                    <button class="vscode-btn secondary" onclick="downloadUserCode(this, 'THIB2_TH2_8.cpp')">Tải file .cpp</button>
+                                    <button class="vscode-btn danger" onclick="clearUserCode(this)">Xóa</button>
+                                </div>
+                            </div>
+                            <textarea class="user-textarea" placeholder="// Dán hoặc gõ code C++ của bạn vào đây để lưu trữ ôn tập..."></textarea>
+                            <div class="preview-label">Xem trước code tô màu cú pháp:</div>
+                            <pre><code class="language-cpp user-code-preview">// Chưa có code ghi chú...</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- @[END-CPP: TH-2.8] -->
             </section>
         </div>
 
         <!-- ========================================================================= -->
-        <!-- TRANG 3: XẾP TOA TÀU (THIB-3 | 2.0 ĐIỂM | 6 TRƯỜNG HỢP)                   -->
+        <!-- TRANG 3: XẾP TOA TÀU (THIB-3 | 2.0 ĐIỂM | 7 TRƯỜNG HỢP)                   -->
         <!-- ========================================================================= -->
         <div id="page-3" class="page-section" style="display:none;">
             <!-- ==================== TH 3.1 ==================== -->
@@ -3612,6 +4397,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.1] - Xếp toa tàu: Đổi chỗ 2 toa kề nhau (Nghịch thế) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-3-1">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -3623,6 +4411,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.1 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3665,6 +4454,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.1 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3690,6 +4480,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-3.1 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -3705,6 +4496,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-3.1] -->
             </section>
 
             <!-- ==================== TH 3.2 ==================== -->
@@ -3768,6 +4560,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.2] - Xếp toa tàu: Giữ lại nhiều toa nhất (LIS O(N log N)) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-3-2">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -3779,6 +4574,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.2 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3836,6 +4632,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.2 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3865,6 +4662,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-3.2 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -3880,6 +4678,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-3.2] -->
             </section>
 
             <!-- ==================== TH 3.3 ==================== -->
@@ -3949,6 +4748,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.3] - Xếp toa tàu: Lập lịch đường ray nhà ga -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-3-3">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -3960,6 +4762,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.3 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -3998,6 +4801,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.3 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4045,6 +4849,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-3.3 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -4060,6 +4865,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-3.3] -->
             </section>
 
             <!-- ==================== TH 3.4 ==================== -->
@@ -4129,6 +4935,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.4] - Xếp toa tàu: Xếp toa có Deadline & Tiền cước -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-3-4">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -4140,6 +4949,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.4 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4200,6 +5010,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.4 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4245,6 +5056,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-3.4 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -4260,6 +5072,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-3.4] -->
             </section>
 
             <!-- ==================== TH 3.5 ==================== -->
@@ -4321,6 +5134,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.5] - Xếp toa tàu: Điều phối qua ray phụ (Stack LIFO) -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-3-5">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -4332,6 +5148,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.5 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4368,6 +5185,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.5 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4398,6 +5216,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-3.5 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -4413,6 +5232,7 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-3.5] -->
             </section>
 
             <!-- ==================== TH 3.6 ==================== -->
@@ -4474,6 +5294,9 @@ int main() {
                     </div>
                 </div>
 
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.6] - Xếp toa tàu: Đoạn toa tổng Max (Kadane) & Ghép số -->
+                <!-- ================================================================= -->
                 <div class="vscode-window" data-prob-id="th-3-6">
                     <div class="vscode-titlebar">
                         <div class="vscode-tabs">
@@ -4485,6 +5308,7 @@ int main() {
                             <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
                         </div>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.6 | TAB-1 | CODE CHUẨN FULL ĐIỂM] (Sửa code C++ Tab 1 tại <pre> bên dưới) -->
                     <div class="vscode-pane active">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4526,6 +5350,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-EDIT: TH-3.6 | TAB-2 | CODE PHỤ / SUBTASK 1 / BIẾN THỂ] (Sửa code C++ Tab 2 tại <pre> bên dưới) -->
                     <div class="vscode-pane">
 <pre><code class="language-cpp">#include &lt;bits/stdc++.h&gt;
 using namespace std;
@@ -4563,6 +5388,7 @@ int main() {
     return 0;
 }</code></pre>
                     </div>
+                    <!-- @[CPP-NOTE: TH-3.6 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
                     <div class="vscode-pane">
                         <div class="user-code-area">
                             <div class="user-code-toolbar">
@@ -4578,6 +5404,167 @@ int main() {
                         </div>
                     </div>
                 </div>
+                <!-- @[END-CPP: TH-3.6] -->
+            </section>
+
+            <!-- ==================== TH 3.7 (MỚI BỔ SUNG) ==================== -->
+            <section class="problem-card" id="th-3-7" data-label="TH 3.7: Chọn K VĐV/toa chênh lệch Min (CH1-08)" data-keywords="chon k van dong vien k toa tau chenh lech nho nhat phan tu nho thu k ch1-08 ch1-03 nth_element">
+                <div class="prob-breadcrumb">ĐỐI CHIẾU CA 1 & CA 2 · THIB-3 (DẠNG 3.7 - CHỌN K PHẦN TỬ CHÊNH LỆCH NHỎ NHẤT CH1-08 & PHẦN TỬ NHỎ THỨ K CH1-03)</div>
+                <h1 class="prob-title">Xếp toa tàu / Vận động viên (TH 3.7: Chọn K phần tử đồng đều nhất & Phần tử nhỏ thứ K)</h1>
+                <div class="prob-limits">Giới hạn 0.5 giây mỗi test · bộ nhớ 256 MB · 10 test · tối đa 100.0 điểm.</div>
+                <div class="prob-Weight"><strong>Bài này 2 điểm</strong> trong tổng 10 điểm của đề. Điểm thang 100 của bài được quy tỉ lệ về số điểm này.</div>
+
+                <div class="prob-white-box">
+                    <p>Có <code>N</code> vận động viên / toa tàu, phần tử thứ <code>i</code> có chiều cao / tải trọng là <code>Aᵢ</code>. Ban tổ chức cần chọn ra đúng <code>K</code> vận động viên / toa tàu để lập thành một đội hình đồng đều sao cho <strong>độ chênh lệch giữa phần tử lớn nhất và phần tử nhỏ nhất trong <code>K</code> phần tử được chọn là nhỏ nhất có thể</strong>.</p>
+                    <p><em>(Lưu ý: Đây chính là bài thực hành <strong>CH1-08</strong>. Ngoài ra trong Tab 1 có kèm luôn đoạn code dùng <code>nth_element</code> tìm <strong>Phần tử nhỏ thứ K</strong> chuẩn bài thực hành <strong>CH1-03</strong>).</em></p>
+
+                    <h3>Dữ liệu vào</h3>
+                    <ul>
+                        <li>Dòng 1: Hai số nguyên dương <code>N</code> và <code>K</code> (<code>1 ≤ K ≤ N ≤ 200 000</code>).</li>
+                        <li>Dòng 2: <code>N</code> số nguyên <code>A₁, A₂, ..., Aₙ</code> (<code>1 ≤ Aᵢ ≤ 10⁹</code>).</li>
+                    </ul>
+
+                    <h3>Kết quả ra</h3>
+                    <p>Một số nguyên — độ chênh lệch nhỏ nhất giữa phần tử lớn nhất và nhỏ nhất trong nhóm <code>K</code> phần tử.</p>
+
+                    <h3>Ví dụ</h3>
+                    <div class="example-block">6 3
+10 4 7 1 9 8</div>
+                    <p>Kết quả: <code>2</code> — Sau khi sắp xếp <code>[1, 4, 7, 8, 9, 10]</code>, chọn 3 phần tử liên tiếp <code>(7, 8, 9)</code> hoặc <code>(8, 9, 10)</code> có độ chênh lệch <code>max - min = 2</code>.</p>
+
+                    <h3>Test mẫu</h3>
+                    <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
+
+                    <div class="io-grid">
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">GÕ VÀO</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">6 3
+10 4 7 1 9 8</div>
+                        </div>
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">PHẢI IN RA</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">2</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Biểu điểm:</strong> nộp <strong>một chương trình</strong>, điểm tuỳ vào nó chạy đúng tới cỡ dữ liệu nào:</p>
+                    <ul>
+                        <li><strong>1 điểm</strong> nếu chạy đúng các bộ có <code>N ≤ 2 000</code></li>
+                        <li><strong>đủ 2 điểm</strong> nếu chạy đúng cả các bộ có <code>N</code> tới <code>200 000</code></li>
+                    </ul>
+
+                    <div class="algo-hint-box">
+                        <strong>💡 Gợi ý thuật toán & Bẫy cần tránh:</strong><br>
+                        • <strong>Bài CH1-08 (Chọn K phần tử chênh lệch nhỏ nhất):</strong> Sắp xếp mảng tăng dần <code>O(N log N)</code>. Duyệt cửa sổ trượt độ dài <code>K</code> từ <code>i = 0</code> đến <code>n - k</code>, cập nhật <code>ans = min(ans, A[i + k - 1] - A[i])</code>.<br>
+                        • <strong>Bài CH1-03 (Tìm phần tử nhỏ thứ K - 1-indexed):</strong> Dùng hàm <code>nth_element(A.begin(), A.begin() + k - 1, A.end())</code> trong <code>O(N)</code> hoặc <code>sort</code> rồi in ra <code>A[k - 1]</code>.
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-3.7] - Chọn K phần tử chênh lệch Min (CH1-08 & CH1-03) -->
+                <!-- ================================================================= -->
+                <div class="vscode-window" data-prob-id="th-3-7">
+                    <div class="vscode-titlebar">
+                        <div class="vscode-tabs">
+                            <button class="vscode-tab active" onclick="switchCodeTab(this, 0)"><span class="cpp-icon">C++</span> Tab 1: Cửa Sổ Trượt O(N log N) (CH1-08) & nth_element (CH1-03)</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 1)"><span class="cpp-icon">C++</span> Tab 2: Code Vét Cạn O(N²) (Subtask 1: N ≤ 2000)</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 2)">📝 Ghi chú & Code của tôi</button>
+                        </div>
+                        <div class="vscode-actions">
+                            <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
+                        </div>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-3.7 | TAB-1 | CH1-08 & CH1-03 FULL ĐIỂM] -->
+                    <div class="vscode-pane active">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n, k;
+    if (!(cin >> n >> k)) return 0;
+
+    vector<long long> A(n);
+    for (int i = 0; i < n; i++) {
+        cin >> A[i];
+    }
+
+    // =====================================================================
+    // BÀI CH1-08: Chọn K VĐV / K toa tàu có độ chênh lệch nhỏ nhất O(N log N)
+    // =====================================================================
+    sort(A.begin(), A.end());
+
+    long long ans = LLONG_MAX;
+    for (int i = 0; i + k - 1 < n; i++) {
+        ans = min(ans, A[i + k - 1] - A[i]);
+    }
+    cout << ans << "\n";
+
+    /* =====================================================================
+    // BÀI CH1-03 (Nếu đề hỏi): Tìm phần tử nhỏ thứ K (1 <= K <= N) trong O(N)
+    nth_element(A.begin(), A.begin() + k - 1, A.end());
+    cout << A[k - 1] << "\n";
+    ===================================================================== */
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-3.7 | TAB-2 | VÉT CẠN SUBTASK 1 (N <= 2000)] -->
+                    <div class="vscode-pane">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// Vét cạn O(N^2) cho Subtask 1 (N <= 2000):
+// Với mỗi phần tử A[i] làm min, đếm xem có đủ K phần tử >= A[i] không
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int n, k;
+    cin >> n >> k;
+    vector<long long> A(n);
+    for (int i = 0; i < n; i++) cin >> A[i];
+
+    // Sắp xếp bằng 2 vòng lặp Selection Sort O(N^2) rồi trượt cửa sổ
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = i + 1; j < n; j++) {
+            if (A[i] > A[j]) swap(A[i], A[j]);
+        }
+    }
+
+    long long ans = LLONG_MAX;
+    for (int i = 0; i + k - 1 < n; i++) {
+        ans = min(ans, A[i + k - 1] - A[i]);
+    }
+
+    cout << ans << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-NOTE: TH-3.7 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
+                    <div class="vscode-pane">
+                        <div class="user-code-area">
+                            <div class="user-code-toolbar">
+                                <span class="save-status">✔ Tự động lưu vào trình duyệt (LocalStorage)</span>
+                                <div>
+                                    <button class="vscode-btn secondary" onclick="downloadUserCode(this, 'THIB3_TH3_7.cpp')">Tải file .cpp</button>
+                                    <button class="vscode-btn danger" onclick="clearUserCode(this)">Xóa</button>
+                                </div>
+                            </div>
+                            <textarea class="user-textarea" placeholder="// Dán hoặc gõ code C++ của bạn vào đây để lưu trữ ôn tập..."></textarea>
+                            <div class="preview-label">Xem trước code tô màu cú pháp:</div>
+                            <pre><code class="language-cpp user-code-preview">// Chưa có code ghi chú...</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- @[END-CPP: TH-3.7] -->
             </section>
         </div>
 
@@ -4585,6 +5572,107 @@ int main() {
 
     <script>
         let currentPage = 1;
+        let isSortedByProb = false;
+
+        // Bảng cấu hình % Khả năng gặp chuẩn đối chiếu chéo Ca 1 & Ca 2 cho cả 24 trường hợp
+        const PROB_STATS = {
+            // TRANG 1 (Câu 1 - 5.0đ)
+            'th-1-1': { pct: 35, label: '🔥 RẤT CAO - Giống 100% Ghép thanh gỗ & Xếp nhóm khám bệnh' },
+            'th-1-4': { pct: 20, label: '🔥 RẤT CAO - Khớp cả Dây cáp lẫn Máy bơm' },
+            'th-1-2': { pct: 15, label: '⚡ KHÁ CAO - Bài thực hành CH1-06' },
+            'th-1-3': { pct: 12, label: '⚡ KHÁ CAO - Hai con trỏ tổng' },
+            'th-1-5': { pct: 8,  label: '📌 DỰ PHÒNG' },
+            'th-1-9': { pct: 4,  label: '📌 DỰ PHÒNG QUAN TRỌNG' },
+            'th-1-6': { pct: 3,  label: '📌 DỰ PHÒNG' },
+            'th-1-7': { pct: 2,  label: '📌 DỰ PHÒNG' },
+            'th-1-8': { pct: 1,  label: '📌 DỰ PHÒNG' },
+
+            // TRANG 2 (Câu 2 - 3.0đ)
+            'th-2-1': { pct: 45, label: '🔥 RẤT CAO - Khớp tuyệt đối cả 2 ca và mốc N ≤ 18 / N ≤ 2000' },
+            'th-2-4': { pct: 16, label: '🔥 RẤT CAO - Quay lui N ≤ 18 & QHĐ N ≤ 2000' },
+            'th-2-8': { pct: 12, label: '⚡ KHÁ CAO - Bài Chuyển hàng trong de.pdf' },
+            'th-2-2': { pct: 10, label: '⚡ KHÁ CAO' },
+            'th-2-3': { pct: 7,  label: '📌 DỰ PHÒNG' },
+            'th-2-7': { pct: 5,  label: '📌 DỰ PHÒNG QUAN TRỌNG - Slide 11 Chương 5' },
+            'th-2-5': { pct: 3,  label: '📌 DỰ PHÒNG' },
+            'th-2-6': { pct: 2,  label: '📌 DỰ PHÒNG' },
+
+            // TRANG 3 (Câu 3 - 2.0đ)
+            'th-3-1': { pct: 38, label: '🔥 RẤT CAO - Khớp hoàn hảo cả 2 ca và 2 mốc N' },
+            'th-3-2': { pct: 28, label: '🔥 RẤT CAO - Bài thực hành CH5-01' },
+            'th-3-7': { pct: 12, label: '⚡ KHÁ CAO - Bài thực hành CH1-08 & CH1-03' },
+            'th-3-3': { pct: 8,  label: '📌 DỰ PHÒNG' },
+            'th-3-4': { pct: 6,  label: '📌 DỰ PHÒNG - Bài Phòng thu trong de.pdf' },
+            'th-3-6': { pct: 5,  label: '📌 DỰ PHÒNG' },
+            'th-3-5': { pct: 3,  label: '📌 DỰ PHÒNG' }
+        };
+
+        function getProbTier(pct) {
+            if (pct >= 16) return { cardCls: 'prob-chance-high', pillCls: 'pill-prob-high' };
+            if (pct >= 10) return { cardCls: 'prob-chance-med',  pillCls: 'pill-prob-med' };
+            return { cardCls: 'prob-chance-low', pillCls: 'pill-prob-low' };
+        }
+
+        // Tự động gắn Huy hiệu % khả năng gặp kèm Progress Bar lên đầu mỗi Problem Card
+        function initProbabilityBadges() {
+            document.querySelectorAll('.page-section').forEach(sec => {
+                sec.querySelectorAll('.problem-card').forEach((card, idx) => {
+                    if (!card.dataset.origIndex) {
+                        card.dataset.origIndex = idx;
+                    }
+                    const stat = PROB_STATS[card.id] || { pct: 1, label: '📌 DỰ PHÒNG' };
+                    card.dataset.prob = stat.pct;
+
+                    if (!card.querySelector('.prob-chance-banner')) {
+                        const tier = getProbTier(stat.pct);
+                        const banner = document.createElement('div');
+                        banner.className = `prob-chance-banner ${tier.cardCls}`;
+                        // Nhân tỷ lệ hiển thị thanh progress bar (tối đa 45% -> ~95% độ rộng thanh để trực quan)
+                        const barWidth = Math.min(100, Math.max(8, Math.round(stat.pct * 2.1)));
+                        banner.innerHTML = `
+                            <div class="prob-chance-left">
+                                <span class="prob-chance-pct">${stat.pct}%</span>
+                                <span class="prob-chance-note">Khả năng gặp: ${stat.label}</span>
+                            </div>
+                            <div class="prob-chance-bar-wrap" title="Xác suất xuất hiện: ${stat.pct}%">
+                                <div class="prob-chance-bar-fill" style="width: ${barWidth}%"></div>
+                            </div>
+                        `;
+                        const titleEl = card.querySelector('.prob-title');
+                        if (titleEl) {
+                            titleEl.insertAdjacentElement('afterend', banner);
+                        } else {
+                            card.prepend(banner);
+                        }
+                    }
+                });
+            });
+        }
+
+        // Bấm nút sắp xếp các bài trong từng trang theo % khả năng gặp từ cao xuống thấp (hoặc về mặc định)
+        function toggleSortByProb() {
+            isSortedByProb = !isSortedByProb;
+            const btn = document.getElementById('sort-prob-btn');
+            if (btn) {
+                btn.classList.toggle('active-sort', isSortedByProb);
+                btn.textContent = isSortedByProb ? 'Thứ tự gốc (TH) ↺' : 'Sắp xếp theo % gặp ↓';
+            }
+
+            document.querySelectorAll('.page-section').forEach(sec => {
+                const cards = Array.from(sec.querySelectorAll('.problem-card'));
+                cards.sort((a, b) => {
+                    if (isSortedByProb) {
+                        const diff = Number(b.dataset.prob || 0) - Number(a.dataset.prob || 0);
+                        if (diff !== 0) return diff;
+                    }
+                    return Number(a.dataset.origIndex || 0) - Number(b.dataset.origIndex || 0);
+                });
+                cards.forEach(c => sec.appendChild(c));
+            });
+
+            updateQuickJumpBar();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
         // 1. Hàm chuyển trang (Trang 1 / Trang 2 / Trang 3)
         function switchPage(pageNum) {
@@ -4601,7 +5689,7 @@ int main() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // 2. Tự động cập nhật Sidebar Mục lục nhanh
+        // 2. Tự động cập nhật Sidebar Mục lục nhanh (kèm Badge % bên phải mỗi mục)
         function updateQuickJumpBar() {
             const bar = document.getElementById('quick-jump-bar');
             const badge = document.getElementById('toc-count-badge');
@@ -4626,13 +5714,17 @@ int main() {
                     const titlePart = parts.length > 1 ? parts.slice(1).join(':').trim() : rawLabel;
                     const numStr = count < 10 ? '0' + count : count;
 
+                    const stat = PROB_STATS[card.id] || { pct: 1, label: '' };
+                    const tier = getProbTier(stat.pct);
+
                     html += `
-                        <a href="#${card.id}" class="jump-pill" data-target="${card.id}" title="${rawLabel}">
+                        <a href="#${card.id}" class="jump-pill" data-target="${card.id}" title="${rawLabel} (${stat.pct}% - ${stat.label})">
                             <span class="pill-num">${numStr}</span>
                             <span class="pill-text">
                                 <span class="pill-code">${codePart}</span>
                                 <span class="pill-title">${titlePart}</span>
                             </span>
+                            <span class="pill-prob-badge ${tier.pillCls}">${stat.pct}%</span>
                         </a>`;
                 }
             });
@@ -4669,7 +5761,7 @@ int main() {
             });
 
             const bar = document.getElementById('quick-jump-bar');
-            pills.forEach(  pill => {
+            pills.forEach(pill => {
                 const isMatch = pill.getAttribute('data-target') === activeId;
                 pill.classList.toggle('active-pill', isMatch);
                 if (isMatch && bar) {
@@ -4995,6 +6087,7 @@ int main() {
 
         // Khởi chạy khi tải trang
         document.addEventListener('DOMContentLoaded', () => {
+            initProbabilityBadges();
             document.querySelectorAll('pre code.language-cpp').forEach(el => {
                 highlightAndEnhance(el);
             });
