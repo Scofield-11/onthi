@@ -445,27 +445,45 @@
         @media (max-width: 1024px) {
             .sidebar-toc {
                 position: static;
-                width: auto;
+                width: calc(100% - 24px);
                 max-width: 920px;
                 max-height: none;
-                margin: 16px auto 0;
+                margin: 12px auto 0;
+                border-radius: 12px;
+            }
+            .sidebar-toc-header {
+                padding: 10px 14px;
             }
             .quick-jump-inner {
                 flex-direction: row;
-                flex-wrap: wrap;
-                max-height: none;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 8px 10px;
+                gap: 8px;
+                scrollbar-width: none;
+            }
+            .quick-jump-inner::-webkit-scrollbar {
+                display: none;
             }
             .jump-pill {
-                flex: 1 1 210px;
+                flex: 0 0 auto;
+                width: 205px;
                 border: 1px solid #e2e8f0;
+                background: #f8fafc;
+                padding: 7px 10px;
+            }
+            .jump-pill.active-pill::before {
+                display: none;
             }
             .sidebar-toc-footer {
                 display: none;
             }
             .main-container {
                 transform: none;
-                margin: 20px auto;
+                margin: 16px auto;
                 max-width: 920px;
+                padding: 0 12px;
             }
         }
 
@@ -770,15 +788,41 @@
             color: #d4d4d4;
         }
 
-        /* Tinh chỉnh màu VS Code Dark+ */
-        .hljs-meta, .hljs-meta .hljs-keyword { color: #c586c0 !important; }
+        /* ================= BẢNG MÀU VISUAL STUDIO / VS CODE DARK+ CHI TIẾT ================= */
+        /* 1. Chỉ thị tiền xử lý (#include, #define) */
+        .hljs-meta, .hljs-meta .hljs-keyword { color: #c586c0 !important; font-weight: 500; }
         .hljs-meta .hljs-string { color: #ce9178 !important; }
-        .hljs-keyword { color: #569cd6 !important; }
-        .hljs-type, .hljs-built_in { color: #4ec9b0 !important; }
-        .hljs-number { color: #b5cea8 !important; }
+
+        /* 2. Từ khóa khai báo & Kiểu dữ liệu cơ bản (int, long, void, bool, const, struct, using, namespace) */
+        .hljs-keyword, .hljs-type { color: #569cd6 !important; }
+
+        /* 3. Từ khóa điều khiển luồng (if, else, for, while, return, break, continue, switch, case) -> Tím hồng VS Code */
+        .vs-control { color: #c586c0 !important; font-weight: 500; }
+
+        /* 4. Lớp, Struct, STL Containers & Namespace (vector, pair, priority_queue, stack, string, std, Tau, Toa) -> Xanh ngọc */
+        .hljs-built_in, .vs-type-stl, .vs-namespace { color: #4ec9b0 !important; }
+
+        /* 5. Tên hàm & Phương thức STL (main, sort, lower_bound, max, min, dfs, push_back, pop...) -> Vàng nhạt */
+        .hljs-title.function_, .vs-func { color: #dcdcaa !important; }
+
+        /* 6. Biến số, tham số & thuộc tính (n, d, L, dp, first, second...) -> Xanh da trời nhạt (Light Sky Blue) */
+        .vs-var, .vs-prop { color: #9cdcfe !important; }
+
+        /* 7. Hằng số, Macro & Luồng nhập xuất (cin, cout, LLONG_MAX, INF, MAXN, NULL, true, false) -> Xanh sáng */
+        .vs-const, .vs-stream { color: #4fc1ff !important; }
+
+        /* 8. Số học, Chuỗi ký tự & Comment */
+        .hljs-number, .vs-num { color: #b5cea8 !important; }
         .hljs-string { color: #ce9178 !important; }
         .hljs-comment { color: #6a9955 !important; font-style: italic; }
-        .hljs-title.function_ { color: #dcdcaa !important; }
+
+        /* 9. Toán tử (<<, >>, <=, >=, ==, !=, &&, ||, ::, ->) */
+        .vs-op { color: #d4d4d4 !important; }
+
+        /* 10. Tô màu cặp ngoặc (Bracket Pair Colorization chuẩn VS Code) */
+        .vs-b0 { color: #ffd700 !important; } /* Cấp 1: Vàng Gold */
+        .vs-b1 { color: #da70d6 !important; } /* Cấp 2: Tím Orchid */
+        .vs-b2 { color: #179fff !important; } /* Cấp 3: Xanh Dương Sáng */
 
         /* Tab 3: Khu vực người dùng tự ghi chú & Paste code */
         .user-code-area {
@@ -838,6 +882,210 @@
             padding: 40px 20px;
             color: var(--text-muted);
         }
+
+        /* Nút nổi Lên đầu trang trên Mobile */
+        .mobile-fab-top {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 16px;
+            z-index: 999;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #1e40af 0%, #2563eb 100%);
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 800;
+            box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* ================= TỐI ƯU GIAO DIỆN MOBILE (<= 768px) ================= */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14.5px;
+                padding-bottom: 70px;
+            }
+
+            .mobile-fab-top {
+                display: inline-flex;
+            }
+
+            /* 1. Thu gọn Sticky Navbar trên Mobile */
+            .nav-top-row {
+                padding: 8px 12px;
+                gap: 8px;
+            }
+
+            .page-tabs {
+                width: 100%;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 4px;
+                gap: 5px;
+                scrollbar-width: none;
+            }
+
+            .page-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .page-btn {
+                flex: 0 0 auto;
+                padding: 6px 10px;
+                font-size: 12.5px;
+                gap: 5px;
+                white-space: nowrap;
+            }
+
+            .page-btn .tab-step {
+                font-size: 10px;
+                padding: 1.5px 5px;
+            }
+
+            .page-btn .tab-score {
+                font-size: 10.5px;
+                padding: 1px 6px;
+            }
+
+            .search-box {
+                min-width: 100%;
+                max-width: 100%;
+            }
+
+            /* Cỡ chữ 16px chống tự động zoom trên iPhone (iOS Safari) */
+            .search-box input {
+                font-size: 16px;
+                padding: 7px 34px 7px 34px;
+                border-radius: 8px;
+            }
+
+            /* 2. Căn chỉnh thẻ bài toán & khoảng cách neo (scroll-margin) */
+            .problem-card {
+                margin-bottom: 36px;
+                scroll-margin-top: 118px;
+            }
+
+            .prob-breadcrumb {
+                font-size: 11px;
+                line-height: 1.4;
+            }
+
+            .prob-title {
+                font-size: 20px;
+                margin-bottom: 6px;
+            }
+
+            .prob-limits, .prob-Weight {
+                font-size: 13.5px;
+                margin-bottom: 10px;
+            }
+
+            .prob-white-box {
+                padding: 16px 14px;
+                border-radius: 8px;
+            }
+
+            .prob-white-box h3 {
+                font-size: 15.5px;
+                margin-top: 16px;
+            }
+
+            .prob-white-box code {
+                font-size: 13px;
+                word-break: break-word;
+            }
+
+            .example-block, .io-content {
+                font-size: 13px;
+                padding: 10px 12px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .algo-hint-box {
+                padding: 12px 14px;
+                font-size: 13.5px;
+            }
+
+            /* 3. Khung VS Code trượt ngang Tab mượt như App */
+            .vscode-titlebar {
+                flex-direction: column;
+                align-items: stretch;
+                padding: 0;
+            }
+
+            .vscode-tabs {
+                width: 100%;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                border-bottom: 1px solid var(--vscode-border);
+                scrollbar-width: none;
+            }
+
+            .vscode-tabs::-webkit-scrollbar {
+                display: none;
+            }
+
+            .vscode-tab {
+                flex: 0 0 auto;
+                white-space: nowrap;
+                padding: 9px 12px;
+                font-size: 12px;
+            }
+
+            .vscode-actions {
+                justify-content: flex-end;
+                padding: 6px 10px;
+                background: #202021;
+            }
+
+            .vscode-btn {
+                width: 100%;
+                padding: 7px 12px;
+                font-size: 12.5px;
+                text-align: center;
+            }
+
+            .vscode-pane pre {
+                padding: 14px 12px;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .vscode-pane pre code.hljs {
+                font-size: 12.8px;
+                line-height: 1.5;
+            }
+
+            /* 4. Khu vực nhập code cá nhân trên Mobile */
+            .user-code-area {
+                padding: 12px;
+            }
+
+            .user-code-toolbar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .user-code-toolbar > div {
+                display: flex;
+                gap: 8px;
+            }
+
+            .user-code-toolbar .vscode-btn {
+                flex: 1;
+            }
+
+            .user-textarea {
+                font-size: 16px; /* Chống iOS auto-zoom khi gõ code */
+                min-height: 180px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -891,6 +1139,8 @@
             </button>
         </div>
     </aside>
+
+    <button class="mobile-fab-top" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" title="Lên đầu trang">↑</button>
 
     <main class="main-container">
         <div id="empty-filter" class="empty-filter-msg">
@@ -4418,11 +4668,19 @@ int main() {
                 }
             });
 
-            pills.forEach(pill => {
+            const bar = document.getElementById('quick-jump-bar');
+            pills.forEach(  pill => {
                 const isMatch = pill.getAttribute('data-target') === activeId;
                 pill.classList.toggle('active-pill', isMatch);
-                if (isMatch) {
-                    pill.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+                if (isMatch && bar) {
+                    // Chỉ cuộn nội bộ bên trong thanh Mục lục, không làm giật màn hình trang web trên Mobile
+                    if (window.innerWidth <= 1024) {
+                        const targetLeft = pill.offsetLeft - bar.offsetLeft - (bar.clientWidth / 2) + (pill.clientWidth / 2);
+                        bar.scrollTo({ left: Math.max(0, targetLeft), behavior: 'smooth' });
+                    } else {
+                        const targetTop = pill.offsetTop - bar.offsetTop - (bar.clientHeight / 2) + (pill.clientHeight / 2);
+                        bar.scrollTo({ top: Math.max(0, targetTop), behavior: 'smooth' });
+                    }
                 }
             });
         }
@@ -4528,6 +4786,152 @@ int main() {
             });
         }
 
+        // 6b. Bộ nâng cấp màu C++ Semantic Highlighting & Bracket Colorization chuẩn Visual Studio
+        const VS_CONTROL_SET = new Set([
+            'if', 'else', 'for', 'while', 'do', 'switch', 'case', 'default',
+            'break', 'continue', 'return', 'goto', 'try', 'catch', 'throw'
+        ]);
+        const VS_STL_TYPES = new Set([
+            'vector', 'pair', 'priority_queue', 'stack', 'queue', 'deque',
+            'set', 'multiset', 'map', 'multimap', 'unordered_map', 'unordered_set',
+            'string', 'greater', 'less', 'std', 'ios_base', 'Tau', 'Toa'
+        ]);
+        const VS_STREAMS = new Set(['cin', 'cout', 'cerr', 'clog', 'endl']);
+        const VS_CONSTANTS = new Set([
+            'LLONG_MAX', 'LLONG_MIN', 'INT_MAX', 'INT_MIN', 'INF', 'MAXN', 'NULL', 'nullptr', 'true', 'false'
+        ]);
+        const VS_FUNCS = new Set([
+            'sort', 'lower_bound', 'upper_bound', 'equal_range', 'max', 'min', 'llabs', 'abs',
+            'reverse', 'memset', 'swap', 'push_back', 'pop_back', 'push', 'pop', 'top', 'front',
+            'back', 'begin', 'end', 'rbegin', 'rend', 'size', 'empty', 'clear', 'tie',
+            'sync_with_stdio', 'findSlot', 'mergeCount', 'demNghichThe', 'kiemTra', 'dfs', 'Try', 'cmp'
+        ]);
+        const VS_PRIMITIVES = new Set([
+            'int', 'long', 'short', 'char', 'void', 'bool', 'float', 'double',
+            'signed', 'unsigned', 'const', 'static', 'struct', 'class', 'auto', 'using', 'namespace'
+        ]);
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&').replace(/</g, '<').replace(/>/g, '>');
+        }
+
+        function enhanceVSCodeSyntax(codeEl) {
+            if (!codeEl || codeEl.dataset.vsEnhanced === 'true') return;
+            codeEl.dataset.vsEnhanced = 'true';
+
+            // Bước 1: Phân loại lại các thẻ span do Highlight.js tạo sẵn
+            codeEl.querySelectorAll('span').forEach(sp => {
+                if (sp.closest('.hljs-comment, .hljs-string, .hljs-meta')) return;
+                const txt = sp.textContent.trim();
+                if (VS_CONTROL_SET.has(txt)) {
+                    sp.className = 'vs-control';
+                } else if (VS_STREAMS.has(txt)) {
+                    sp.className = 'vs-stream';
+                } else if (VS_CONSTANTS.has(txt)) {
+                    sp.className = 'vs-const';
+                } else if (VS_FUNCS.has(txt)) {
+                    sp.className = 'vs-func';
+                } else if (VS_STL_TYPES.has(txt)) {
+                    sp.className = 'vs-type-stl';
+                } else if (VS_PRIMITIVES.has(txt)) {
+                    sp.className = 'hljs-keyword';
+                }
+            });
+
+            // Bước 2: Duyệt các Text Node thuần để tô màu biến, hàm, thuộc tính, hằng số và cặp ngoặc
+            const walker = document.createTreeWalker(codeEl, NodeFilter.SHOW_TEXT, null, false);
+            const textNodes = [];
+            let currentNode;
+            while ((currentNode = walker.nextNode())) {
+                const parent = currentNode.parentElement;
+                if (parent && parent.closest('.hljs-comment, .hljs-string, .hljs-meta')) continue;
+                textNodes.push(currentNode);
+            }
+
+            let bracketDepth = 0;
+            const tokenRegex = /([(){}\[\]])|\b(\d+(?:\.\d+)?(?:e[+-]?\d+)?)\b|\b([a-zA-Z_]\w*)\b(\s*\()?|(\.|->)(\s*)([a-zA-Z_]\w*)/g;
+
+            textNodes.forEach(node => {
+                const raw = node.nodeValue;
+                if (!raw || !raw.trim()) return;
+
+                let lastIdx = 0;
+                let htmlOut = '';
+                let match;
+                tokenRegex.lastIndex = 0;
+
+                while ((match = tokenRegex.exec(raw)) !== null) {
+                    if (match.index > lastIdx) {
+                        htmlOut += escapeHtml(raw.slice(lastIdx, match.index));
+                    }
+
+                    const [full, bracket, num, word, openParen, dotOp, dotSpace, propName] = match;
+
+                    if (bracket) {
+                        if (bracket === '(' || bracket === '{' || bracket === '[') {
+                            const cls = 'vs-b' + (bracketDepth % 3);
+                            bracketDepth++;
+                            htmlOut += `<span class="${cls}">${bracket}</span>`;
+                        } else {
+                            bracketDepth = Math.max(0, bracketDepth - 1);
+                            const cls = 'vs-b' + (bracketDepth % 3);
+                            htmlOut += `<span class="${cls}">${bracket}</span>`;
+                        }
+                    } else if (num) {
+                        htmlOut += `<span class="vs-num">${num}</span>`;
+                    } else if (dotOp && propName) {
+                        if (VS_FUNCS.has(propName)) {
+                            htmlOut += `${escapeHtml(dotOp)}${dotSpace}<span class="vs-func">${propName}</span>`;
+                        } else {
+                            htmlOut += `${escapeHtml(dotOp)}${dotSpace}<span class="vs-prop">${propName}</span>`;
+                        }
+                    } else if (word) {
+                        let cls = 'vs-var';
+                        if (VS_CONTROL_SET.has(word)) cls = 'vs-control';
+                        else if (VS_PRIMITIVES.has(word)) cls = 'hljs-keyword';
+                        else if (VS_STL_TYPES.has(word)) cls = 'vs-type-stl';
+                        else if (VS_STREAMS.has(word)) cls = 'vs-stream';
+                        else if (VS_CONSTANTS.has(word)) cls = 'vs-const';
+                        else if (VS_FUNCS.has(word) || openParen) cls = 'vs-func';
+
+                        htmlOut += `<span class="${cls}">${word}</span>`;
+                        if (openParen) {
+                            const spacePart = openParen.slice(0, -1);
+                            const bCls = 'vs-b' + (bracketDepth % 3);
+                            bracketDepth++;
+                            htmlOut += `${spacePart}<span class="${bCls}">(</span>`;
+                        }
+                    } else {
+                        htmlOut += escapeHtml(full);
+                    }
+
+                    lastIdx = tokenRegex.lastIndex;
+                }
+
+                if (lastIdx < raw.length) {
+                    htmlOut += escapeHtml(raw.slice(lastIdx));
+                }
+
+                if (htmlOut !== escapeHtml(raw)) {
+                    const tempSpan = document.createElement('span');
+                    tempSpan.innerHTML = htmlOut;
+                    const frag = document.createDocumentFragment();
+                    while (tempSpan.firstChild) {
+                        frag.appendChild(tempSpan.firstChild);
+                    }
+                    node.parentNode.replaceChild(frag, node);
+                }
+            });
+        }
+
+        function highlightAndEnhance(codeEl) {
+            if (!codeEl) return;
+            delete codeEl.dataset.highlighted;
+            delete codeEl.dataset.vsEnhanced;
+            hljs.highlightElement(codeEl);
+            enhanceVSCodeSyntax(codeEl);
+        }
+
         // 7. Khởi tạo LocalStorage & Highlight cho Tab 3 (Code của tôi)
         function initUserCodeEditors() {
             document.querySelectorAll('.vscode-window').forEach(win => {
@@ -4542,8 +4946,7 @@ int main() {
                 if (saved) {
                     textarea.value = saved;
                     preview.textContent = saved;
-                    delete preview.dataset.highlighted;
-                    hljs.highlightElement(preview);
+                    highlightAndEnhance(preview);
                 }
 
                 // Hỗ trợ phím Tab trong textarea
@@ -4561,8 +4964,7 @@ int main() {
                 textarea.addEventListener('input', function() {
                     localStorage.setItem(storageKey, this.value);
                     preview.textContent = this.value || '// Chưa có code ghi chú...';
-                    delete preview.dataset.highlighted;
-                    hljs.highlightElement(preview);
+                    highlightAndEnhance(preview);
                 });
             });
         }
@@ -4587,14 +4989,15 @@ int main() {
                 textarea.value = '';
                 localStorage.removeItem('tlu_cse426_code_' + probId);
                 preview.textContent = '// Chưa có code ghi chú...';
-                delete preview.dataset.highlighted;
-                hljs.highlightElement(preview);
+                highlightAndEnhance(preview);
             }
         }
 
         // Khởi chạy khi tải trang
         document.addEventListener('DOMContentLoaded', () => {
-            hljs.highlightAll();
+            document.querySelectorAll('pre code.language-cpp').forEach(el => {
+                highlightAndEnhance(el);
+            });
             initUserCodeEditors();
             updateQuickJumpBar();
         });
