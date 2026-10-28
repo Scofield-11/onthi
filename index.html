@@ -216,9 +216,9 @@
         .sidebar-toc {
             position: fixed;
             top: 84px;
-            left: max(20px, calc(50% - 620px));
-            width: 275px;
-            max-height: calc(100vh - 104px);
+            left: max(16px, calc(50% - 620px));
+            width: 290px;
+            max-height: calc(100vh - 100px);
             background: #ffffff;
             border: 1px solid #e2e8f0;
             border-radius: 14px;
@@ -230,24 +230,27 @@
         }
 
         .sidebar-toc-header {
-            padding: 14px 16px 12px;
+            padding: 12px 14px;
             border-bottom: 1px solid #f1f5f9;
             background: linear-gradient(180deg, #f8fafc 0%, #ffffff 100%);
             display: flex;
+            flex-wrap: wrap;
             align-items: center;
             justify-content: space-between;
             gap: 8px;
+            flex-shrink: 0;
         }
 
         .jump-label {
             font-size: 12px;
             font-weight: 800;
             text-transform: uppercase;
-            letter-spacing: 0.06em;
+            letter-spacing: 0.05em;
             color: #1e293b;
             display: inline-flex;
             align-items: center;
             gap: 7px;
+            white-space: nowrap;
         }
 
         .jump-label .toc-icon {
@@ -260,6 +263,7 @@
             background: #eff6ff;
             color: #2563eb;
             font-size: 13px;
+            flex-shrink: 0;
         }
 
         .toc-count-badge {
@@ -270,6 +274,8 @@
             background: #f1f5f9;
             color: #475569;
             border: 1px solid #e2e8f0;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .quick-jump-inner {
@@ -278,6 +284,9 @@
             display: flex;
             flex-direction: column;
             gap: 5px;
+            flex: 1;
+            min-height: 0;
+            position: relative;
             scrollbar-width: thin;
             scrollbar-color: #cbd5e1 transparent;
         }
@@ -299,7 +308,8 @@
             background: transparent;
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 9px;
+            flex-shrink: 0;
             transition: all 0.18s ease;
             position: relative;
         }
@@ -336,7 +346,7 @@
         }
 
         .jump-pill .pill-title {
-            font-size: 13px;
+            font-size: 12.8px;
             font-weight: 600;
             color: #334155;
             white-space: nowrap;
@@ -395,6 +405,7 @@
             padding: 8px 12px;
             border-top: 1px solid #f1f5f9;
             background: #f8fafc;
+            flex-shrink: 0;
         }
 
         .back-top-btn {
@@ -421,7 +432,7 @@
             max-width: 920px;
             margin: 28px auto;
             padding: 0 16px;
-            transform: translateX(148px);
+            margin-left: max(322px, calc(50% - 310px));
         }
 
         .problem-card {
@@ -431,14 +442,13 @@
 
         @media (max-width: 1280px) and (min-width: 1025px) {
             .sidebar-toc {
-                left: 16px;
-                width: 250px;
+                left: 14px;
+                width: 268px;
             }
             .main-container {
-                transform: none;
-                margin-left: 282px;
-                margin-right: 16px;
-                max-width: calc(100% - 298px);
+                margin-left: 294px;
+                margin-right: 14px;
+                max-width: calc(100% - 308px);
             }
         }
 
@@ -458,6 +468,7 @@
                 flex-direction: row;
                 flex-wrap: nowrap;
                 overflow-x: auto;
+                overflow-y: hidden;
                 -webkit-overflow-scrolling: touch;
                 padding: 8px 10px;
                 gap: 8px;
@@ -468,7 +479,7 @@
             }
             .jump-pill {
                 flex: 0 0 auto;
-                width: 205px;
+                width: 225px;
                 border: 1px solid #e2e8f0;
                 background: #f8fafc;
                 padding: 7px 10px;
@@ -480,7 +491,6 @@
                 display: none;
             }
             .main-container {
-                transform: none;
                 margin: 16px auto;
                 max-width: 920px;
                 padding: 0 12px;
