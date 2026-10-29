@@ -1232,6 +1232,24 @@
         .prob-chance-high .prob-chance-bar-fill { background: #ef4444; }
         .prob-chance-med .prob-chance-bar-fill { background: #3b82f6; }
         .prob-chance-low .prob-chance-bar-fill { background: #64748b; }
+
+        /* Hộp đối chiếu kho tài liệu cá nhân (.prob-repo-note) */
+        .prob-repo-note {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-left: 4px solid #16a34a;
+            color: #14532d;
+            padding: 9px 14px;
+            border-radius: 7px;
+            font-size: 13.5px;
+            line-height: 1.5;
+            margin-top: -4px;
+            margin-bottom: 14px;
+        }
+
+        .prob-repo-note strong {
+            color: #15803d;
+        }
     </style>
 </head>
 <body>
@@ -4340,6 +4358,404 @@ int main() {
                 </div>
                 <!-- @[END-CPP: TH-2.8] -->
             </section>
+
+            <!-- ==================== TH 2.9 (ĐỀ KIỂM TRA 2 - BÀI 1) ==================== -->
+            <section class="problem-card" id="th-2-9" data-label="TH 2.9: Ghép máng nước / Cắt thanh (Cái túi vô hạn)" data-keywords="cat thanh kim loai ghep mang nuoc cai tui khong gioi han unbounded knapsack de kiem tra 2">
+                <div class="prob-breadcrumb">ĐỐI CHIẾU ĐỀ KIỂM TRA 2 & SLIDE 34, 55 CHƯƠNG 5 · THIB-2 (DẠNG 2.9 - CÁI TÚI KHÔNG GIỚI HẠN / CẮT THANH KIM LOẠI)</div>
+                <h1 class="prob-title">Kênh tự chảy / Mực nước (TH 2.9: Lắp đặt máng dẫn nước - Cái túi không giới hạn)</h1>
+                <div class="prob-limits">Giới hạn 0.5 giây mỗi test · bộ nhớ 256 MB · 10 test · tối đa 100.0 điểm.</div>
+                <div class="prob-Weight"><strong>Bài này 3 điểm</strong> trong tổng 10 điểm của đề. Điểm thang 100 của bài được quy tỉ lệ về số điểm này.</div>
+
+                <div class="prob-white-box">
+                    <p>Cần lắp đặt một tuyến kênh dẫn nước tự chảy có tổng chiều dài tối đa là <code>L</code> mét. Trong kho có <code>N</code> loại máng dẫn nước tiêu chuẩn, loại thứ <code>i</code> có chiều dài <code>dᵢ</code> mét và mang lại lưu lượng (hoặc giá trị kinh tế) là <code>gᵢ</code>.</p>
+                    <p>Mỗi loại máng nước có sẵn với <strong>số lượng không giới hạn</strong> (có thể dùng <code>0, 1, 2, ...</code> máng cùng loại miễn là tổng chiều dài các máng được chọn không vượt quá <code>L</code>).</p>
+                    <p>Hãy tìm <strong>tổng lưu lượng (giá trị) lớn nhất</strong> có thể đạt được. <em>(Đây chính là bản sao trực tiếp của <strong>Bài 1: Cắt thanh kim loại</strong> trong Đề Kiểm tra 2 và bài <strong>Cái túi không giới hạn</strong> ở Slide 34, 55 Chương 5).</em></p>
+
+                    <h3>Dữ liệu vào</h3>
+                    <ul>
+                        <li>Dòng 1: Hai số nguyên dương <code>L</code> và <code>N</code> (<code>1 ≤ L ≤ 10 000</code>; <code>1 ≤ N ≤ 2 000</code>).</li>
+                        <li><code>N</code> dòng tiếp theo: dòng thứ <code>i</code> gồm hai số nguyên dương <code>dᵢ</code> và <code>gᵢ</code> (<code>1 ≤ dᵢ ≤ L</code>; <code>1 ≤ gᵢ ≤ 10⁹</code>).</li>
+                    </ul>
+
+                    <h3>Kết quả ra</h3>
+                    <p>Một số nguyên kiểu <code>long long</code> — tổng giá trị lớn nhất đạt được.</p>
+
+                    <h3>Ví dụ</h3>
+                    <div class="example-block">10 3
+3 4
+5 7
+2 2</div>
+                    <p>Kết quả: <code>14</code> — Chọn 2 máng loại 2 (mỗi máng dài <code>5</code>, giá trị <code>7</code>), tổng chiều dài <code>5 + 5 = 10 ≤ 10</code>, tổng giá trị <code>7 + 7 = 14</code>.</p>
+
+                    <h3>Test mẫu</h3>
+                    <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
+
+                    <div class="io-grid">
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">GÕ VÀO</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">10 3
+3 4
+5 7
+2 2</div>
+                        </div>
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">PHẢI IN RA</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">14</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Biểu điểm:</strong> nộp <strong>một chương trình</strong>, điểm tuỳ vào nó chạy đúng tới cỡ dữ liệu nào:</p>
+                    <ul>
+                        <li><strong>1,5 điểm</strong> nếu chạy đúng các bộ có <code>N ≤ 18</code></li>
+                        <li><strong>đủ 3 điểm</strong> nếu chạy đúng cả các bộ có <code>N</code> tới <code>2 000</code> (và <code>L ≤ 10 000</code>)</li>
+                    </ul>
+
+                    <div class="algo-hint-box">
+                        <strong>💡 Gợi ý thuật toán & Bẫy cần tránh:</strong><br>
+                        • <strong>Điểm khác biệt duy nhất giữa Cái túi 0-1 (TH 2.4) và Cái túi không giới hạn (TH 2.9):</strong><br>
+                          + Mỗi vật chỉ lấy 1 lần (0-1): vòng lặp chiều dài `len` chạy <strong>GIẢM DẦN</strong> từ `L` về `d[i]`.<br>
+                          + Mỗi vật lấy bao nhiêu lần cũng được (Không giới hạn): vòng lặp chiều dài `len` chạy <strong>TĂNG DẦN</strong> từ `d[i]` lên `L`: <code>f[len] = max(f[len], f[len - d[i]] + g[i]);</code>. Chỉ đúng 2 vòng `for` ngắn gọn!
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.9] - Cắt thanh kim loại / Cái túi không giới hạn   -->
+                <!-- ================================================================= -->
+                <div class="vscode-window" data-prob-id="th-2-9">
+                    <div class="vscode-titlebar">
+                        <div class="vscode-tabs">
+                            <button class="vscode-tab active" onclick="switchCodeTab(this, 0)"><span class="cpp-icon">C++</span> Tab 1: QHĐ 1 Chiều Siêu Ngắn (Full Điểm O(N*L))</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 1)"><span class="cpp-icon">C++</span> Tab 2: Quay Lui Đơn Giản Nhất (Subtask 1: N ≤ 18)</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 2)">📝 Ghi chú & Code của tôi</button>
+                        </div>
+                        <div class="vscode-actions">
+                            <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
+                        </div>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.9 | TAB-1 | CODE CHUẨN FULL ĐIỂM] -->
+                    <div class="vscode-pane active">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    int L, n;
+    if (!(cin >> L >> n)) return 0;
+
+    vector<int> d(n);
+    vector<long long> g(n);
+    for (int i = 0; i < n; i++) {
+        cin >> d[i] >> g[i];
+    }
+
+    // f[len]: tổng giá trị lớn nhất khi lắp đoạn kênh có độ dài tối đa là len
+    vector<long long> f(L + 1, 0);
+
+    for (int i = 0; i < n; i++) {
+        for (int len = d[i]; len <= L; len++) { // Chạy TĂNG DẦN vì mỗi loại được lấy nhiều lần
+            f[len] = max(f[len], f[len - d[i]] + g[i]);
+        }
+    }
+
+    cout << f[L] << "\n";
+
+    /* --- CHÚ THÍCH BIẾN THỂ CẮT THANH ĐỘ DÀI N THÀNH CÁC ĐOẠN 1..N (Bài 10 Slide 55 Ch.5) ---
+       Nếu đề chỉ cho 1 số N và mảng giá bán p[1..N] cho các đoạn dài 1, 2, ..., N:
+       for (int i = 1; i <= n; i++)
+           for (int len = i; len <= n; len++)
+               f[len] = max(f[len], f[len - i] + p[i]);
+    ----------------------------------------------------------------------------------------- */
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.9 | TAB-2 | QUAY LUI SUBTASK 1 (N <= 18)] -->
+                    <div class="vscode-pane">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// Quay lui đơn giản nhất cho Subtask 1 (N <= 18)
+int L, n;
+int d[25];
+long long g[25], kq = 0;
+
+void quayLui(int i, int con_lai, long long tien) {
+    kq = max(kq, tien);
+    if (i == n) return;
+
+    // Thử lấy sl = 0, 1, 2... cái loại i sao cho tổng độ dài không vượt quá con_lai
+    for (int sl = 0; sl * d[i] <= con_lai; sl++) {
+        quayLui(i + 1, con_lai - sl * d[i], tien + sl * g[i]);
+    }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    if (!(cin >> L >> n)) return 0;
+    for (int i = 0; i < n; i++) {
+        cin >> d[i] >> g[i];
+    }
+
+    quayLui(0, L, 0);
+    cout << kq << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-NOTE: TH-2.9 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
+                    <div class="vscode-pane">
+                        <div class="user-code-area">
+                            <div class="user-code-toolbar">
+                                <span class="save-status">✔ Tự động lưu vào trình duyệt (LocalStorage)</span>
+                                <div>
+                                    <button class="vscode-btn secondary" onclick="downloadUserCode(this, 'THIB2_TH2_9.cpp')">Tải file .cpp</button>
+                                    <button class="vscode-btn danger" onclick="clearUserCode(this)">Xóa</button>
+                                </div>
+                            </div>
+                            <textarea class="user-textarea" placeholder="// Dán hoặc gõ code C++ của bạn vào đây để lưu trữ ôn tập..."></textarea>
+                            <div class="preview-label">Xem trước code tô màu cú pháp:</div>
+                            <pre><code class="language-cpp user-code-preview">// Chưa có code ghi chú...</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- @[END-CPP: TH-2.9] -->
+            </section>
+
+            <!-- ==================== TH 2.10 (ĐỀ KIỂM TRA 2 - BÀI 2) ==================== -->
+            <section class="problem-card" id="th-2-10" data-label="TH 2.10: Đổi nhánh kênh / Tuyến xe buýt ≤ K lần" data-keywords="tuyen xe buyt it doi tuyen doi nhanh kenh toi da k lan dijkstra do thi de kiem tra 2">
+                <div class="prob-breadcrumb">ĐỐI CHIẾU ĐỀ KIỂM TRA 2 & CHƯƠNG 6 ĐỒ THỊ · THIB-2 (DẠNG 2.10 - ĐƯỜNG ĐI NGẮN NHẤT ĐỔI TUYẾN TỐI ĐA K LẦN)</div>
+                <h1 class="prob-title">Kênh tự chảy / Mực nước (TH 2.10: Dẫn nước từ trạm 1 đến N đổi nhánh tối đa K lần)</h1>
+                <div class="prob-limits">Giới hạn 0.5 giây mỗi test · bộ nhớ 256 MB · 10 test · tối đa 100.0 điểm.</div>
+                <div class="prob-Weight"><strong>Bài này 3 điểm</strong> trong tổng 10 điểm của đề. Điểm thang 100 của bài được quy tỉ lệ về số điểm này.</div>
+
+                <div class="prob-white-box">
+                    <p>Hệ thống dẫn nước gồm <code>N</code> trạm (đánh số từ <code>1</code> đến <code>N</code>) và <code>M</code> đoạn kênh nối hai chiều. Đoạn kênh thứ <code>i</code> nối giữa trạm <code>u</code> và trạm <code>v</code> mất thời gian chảy là <code>w</code> và thuộc sự quản lý của nhánh/tuyến số <code>t</code> (<code>1 ≤ t ≤ 30</code>).</p>
+                    <p>Cần dẫn nước từ trạm đầu nguồn <code>1</code> đến trạm cuối <code>N</code>. Khi đi tiếp trên cùng một tuyến <code>t</code> thì không tốn lần chuyển van; nhưng nếu chuyển từ tuyến này sang tuyến khác thì tính là <strong>1 lần đổi tuyến</strong> (lần xuất phát đầu tiên từ trạm <code>1</code> không tính là đổi tuyến). Tổng số lần đổi tuyến trên cả hành trình <strong>không được vượt quá <code>K</code> lần</strong> (<code>0 ≤ K ≤ 5</code>).</p>
+                    <p>Hãy tìm <strong>tổng thời gian ít nhất</strong> để dẫn nước từ trạm <code>1</code> đến trạm <code>N</code>, hoặc in ra <code>-1</code> nếu không thể đi được. <em>(Bản sao trực tiếp của <strong>Bài 2: Tuyến xe buýt ít đổi tuyến</strong> trong Đề Kiểm tra 2).</em></p>
+
+                    <h3>Dữ liệu vào</h3>
+                    <ul>
+                        <li>Dòng 1: Ba số nguyên <code>N</code>, <code>M</code> và <code>K</code> (<code>1 ≤ N ≤ 3 000</code>; <code>1 ≤ M ≤ 6 000</code>; <code>0 ≤ K ≤ 5</code>).</li>
+                        <li><code>M</code> dòng tiếp theo: mỗi dòng gồm 4 số nguyên <code>u, v, w, t</code> (<code>1 ≤ u, v ≤ N</code>; <code>1 ≤ w ≤ 10⁶</code>; <code>1 ≤ t ≤ 30</code>).</li>
+                    </ul>
+
+                    <h3>Kết quả ra</h3>
+                    <p>Một số nguyên kiểu <code>long long</code> — tổng thời gian nhỏ nhất tìm được (hoặc <code>-1</code> nếu không có đường đi hợp lệ).</p>
+
+                    <h3>Ví dụ</h3>
+                    <div class="example-block">4 4 1
+1 2 5 1
+2 4 5 2
+1 3 3 1
+3 4 3 1</div>
+                    <p>Kết quả: <code>6</code> — Đi theo lộ trình <code>1 → 3 → 4</code> đều thuộc tuyến số <code>1</code> (0 lần đổi tuyến ≤ 1), tổng thời gian <code>3 + 3 = 6</code>.</p>
+
+                    <h3>Test mẫu</h3>
+                    <p class="test-note">Chạy thử chương trình với bộ test này trong Dev-C++ cho ra đúng kết quả rồi hãy nộp. Chương trình đọc từ bàn phím và in ra màn hình — không in thêm lời nhắc kiểu <code>Nhap n:</code>, vì máy chấm so từng ký tự.</p>
+
+                    <div class="io-grid">
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">GÕ VÀO</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">4 4 1
+1 2 5 1
+2 4 5 2
+1 3 3 1
+3 4 3 1</div>
+                        </div>
+                        <div class="io-box">
+                            <div class="io-header">
+                                <span class="io-label">PHẢI IN RA</span>
+                                <button class="copy-io-btn" onclick="copyText(this)">sao chép</button>
+                            </div>
+                            <div class="io-content">6</div>
+                        </div>
+                    </div>
+
+                    <p><strong>Biểu điểm:</strong> nộp <strong>một chương trình</strong>, điểm tuỳ vào nó chạy đúng tới cỡ dữ liệu nào:</p>
+                    <ul>
+                        <li><strong>1,5 điểm</strong> nếu chạy đúng các bộ có <code>N ≤ 18</code></li>
+                        <li><strong>đủ 3 điểm</strong> nếu chạy đúng cả các bộ có <code>N</code> tới <code>3 000</code></li>
+                    </ul>
+
+                    <div class="algo-hint-box">
+                        <strong>💡 Gợi ý thuật toán & Bẫy cần tránh:</strong><br>
+                        • <strong>Tab 1 (Full điểm - Dijkstra mở rộng trạng thái):</strong> Dùng mảng <code>d[u][k][tuyen]</code> là thời gian ngắn nhất đến trạm <code>u</code>, đã đổi tuyến <code>k</code> lần và vừa đi trên tuyến <code>tuyen</code>. Mẹo khởi tạo vô cùng cực nhanh bằng 1 dòng: <code>memset(d, 0x3f, sizeof(d));</code> (giá trị vô cùng là <code>INF = d[0][0][0]</code>).<br>
+                        • <strong>Tab 2 (Subtask 1 cho <code>N ≤ 18</code>):</strong> Dùng <code>dfs(u, k, tuyen, t_gian)</code> kết hợp cắt nhánh <code>if (t_gian >= ans) return;</code> chỉ 15 dòng code!
+                    </div>
+                </div>
+
+                <!-- ================================================================= -->
+                <!-- @[CPP-BOX: TH-2.10] - Tuyến xe buýt ít đổi tuyến (Dijkstra / DFS)  -->
+                <!-- ================================================================= -->
+                <div class="vscode-window" data-prob-id="th-2-10">
+                    <div class="vscode-titlebar">
+                        <div class="vscode-tabs">
+                            <button class="vscode-tab active" onclick="switchCodeTab(this, 0)"><span class="cpp-icon">C++</span> Tab 1: Dijkstra Mở Rộng Trạng Thái Đơn Giản Nhất</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 1)"><span class="cpp-icon">C++</span> Tab 2: DFS Quay Lui + Cắt Nhánh (Subtask 1: N ≤ 18)</button>
+                            <button class="vscode-tab" onclick="switchCodeTab(this, 2)">📝 Ghi chú & Code của tôi</button>
+                        </div>
+                        <div class="vscode-actions">
+                            <button class="vscode-btn" onclick="copyActiveCode(this)">Sao chép Code</button>
+                        </div>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.10 | TAB-1 | DIJKSTRA ĐƠN GIẢN NHẤT] -->
+                    <div class="vscode-pane active">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+struct Canh {
+    int v;
+    long long w;
+    int tuyen;
+};
+
+struct TrangThai {
+    long long t_gian;
+    int u, k, tuyen;
+    // Hàng đợi ưu tiên lấy t_gian NHỎ NHẤT ra trước
+    bool operator>(const TrangThai &other) const {
+        return t_gian > other.t_gian;
+    }
+};
+
+int n, m, K;
+vector<Canh> adj[3005];
+long long d[3005][6][32]; // d[đỉnh u][số lần đổi k][tuyến vừa đi]
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    if (!(cin >> n >> m >> K)) return 0;
+    for (int i = 0; i < m; i++) {
+        int u, v, t;
+        long long w;
+        cin >> u >> v >> w >> t;
+        adj[u].push_back({v, w, t});
+        adj[v].push_back({u, w, t});
+    }
+
+    // Khởi tạo toàn bộ mảng d bằng vô cùng lớn chỉ với 1 dòng lệnh
+    memset(d, 0x3f, sizeof(d));
+    long long INF = d[0][0][0];
+
+    priority_queue<TrangThai, vector<TrangThai>, greater<TrangThai>> pq;
+    d[1][0][0] = 0;
+    pq.push({0, 1, 0, 0}); // Bắt đầu từ trạm 1, k = 0, tuyen = 0 (chưa lên tuyến nào)
+
+    while (!pq.empty()) {
+        TrangThai cur = pq.top();
+        pq.pop();
+
+        long long t_gian = cur.t_gian;
+        int u = cur.u, k = cur.k, tuyen = cur.tuyen;
+
+        if (u == n) {
+            cout << t_gian << "\n";
+            return 0;
+        }
+        if (t_gian > d[u][k][tuyen]) continue;
+
+        for (auto &e : adj[u]) {
+            // Nếu mới xuất phát (tuyen == 0) hoặc đi tiếp cùng tuyến thì không tăng k
+            int k_moi = (tuyen == 0 || e.tuyen == tuyen) ? k : (k + 1);
+
+            /* --- CHÚ THÍCH NẾU ĐỀ CHO ĐỘ CAO H[1..N] (DÙNG TỐI ĐA K LẦN BƠM NGƯỢC DỐC) ---
+               Nếu tự chảy H[u] >= H[e.v] không tốn bơm, chảy ngược H[u] < H[e.v] tốn 1 lần bơm:
+               Chỉ cần sửa dòng k_moi ở trên thành:
+               int k_moi = (H[u] >= H[e.v]) ? k : (k + 1); (và đặt e.tuyen = 0 cố định)
+            ------------------------------------------------------------------------------- */
+
+            if (k_moi <= K && t_gian + e.w < d[e.v][k_moi][e.tuyen]) {
+                d[e.v][k_moi][e.tuyen] = t_gian + e.w;
+                pq.push({d[e.v][k_moi][e.tuyen], e.v, k_moi, e.tuyen});
+            }
+        }
+    }
+
+    cout << -1 << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-EDIT: TH-2.10 | TAB-2 | DFS QUAY LUI SUBTASK 1 (N <= 18)] -->
+                    <div class="vscode-pane">
+<pre><code class="language-cpp">#include <bits/stdc++.h>
+using namespace std;
+
+// DFS Quay lui + Cắt nhánh cực ngắn cho Subtask 1 (N <= 18)
+struct Canh { int v; long long w; int tuyen; };
+int n, m, K;
+vector<Canh> adj[25];
+bool visited[25];
+long long ans = LLONG_MAX;
+
+void dfs(int u, int k, int tuyen, long long t_gian) {
+    if (t_gian >= ans) return; // Cắt nhánh nếu thời gian đã lớn hơn kỷ lục hiện tại
+    if (u == n) {
+        ans = t_gian;
+        return;
+    }
+    for (auto &e : adj[u]) {
+        if (!visited[e.v]) {
+            int k_moi = (tuyen == 0 || e.tuyen == tuyen) ? k : (k + 1);
+            if (k_moi <= K) {
+                visited[e.v] = true;
+                dfs(e.v, k_moi, e.tuyen, t_gian + e.w);
+                visited[e.v] = false;
+            }
+        }
+    }
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+
+    if (!(cin >> n >> m >> K)) return 0;
+    for (int i = 0; i < m; i++) {
+        int u, v, t;
+        long long w;
+        cin >> u >> v >> w >> t;
+        adj[u].push_back({v, w, t});
+        adj[v].push_back({u, w, t});
+    }
+
+    visited[1] = true;
+    dfs(1, 0, 0, 0);
+
+    cout << (ans == LLONG_MAX ? -1 : ans) << "\n";
+    return 0;
+}</code></pre>
+                    </div>
+                    <!-- @[CPP-NOTE: TH-2.10 | TAB-3 | KHUNG GHI CHÚ CÁ NHÂN] -->
+                    <div class="vscode-pane">
+                        <div class="user-code-area">
+                            <div class="user-code-toolbar">
+                                <span class="save-status">✔ Tự động lưu vào trình duyệt (LocalStorage)</span>
+                                <div>
+                                    <button class="vscode-btn secondary" onclick="downloadUserCode(this, 'THIB2_TH2_10.cpp')">Tải file .cpp</button>
+                                    <button class="vscode-btn danger" onclick="clearUserCode(this)">Xóa</button>
+                                </div>
+                            </div>
+                            <textarea class="user-textarea" placeholder="// Dán hoặc gõ code C++ của bạn vào đây để lưu trữ ôn tập..."></textarea>
+                            <div class="preview-label">Xem trước code tô màu cú pháp:</div>
+                            <pre><code class="language-cpp user-code-preview">// Chưa có code ghi chú...</code></pre>
+                        </div>
+                    </div>
+                </div>
+                <!-- @[END-CPP: TH-2.10] -->
+            </section>
         </div>
 
         <!-- ========================================================================= -->
@@ -5584,37 +6000,143 @@ int main() {
         let currentPage = 1;
         let isSortedByProb = false;
 
-        // Bảng cấu hình % Khả năng gặp chuẩn đối chiếu chéo Ca 1 & Ca 2 cho cả 24 trường hợp
+        // Bảng cấu hình % Khả năng gặp & Đối chiếu kho tài liệu cho toàn bộ 26 trường hợp
         const PROB_STATS = {
             // TRANG 1 (Câu 1 - 5.0đ)
-            'th-1-1': { pct: 35, label: '🔥 RẤT CAO - Giống 100% Ghép thanh gỗ & Xếp nhóm khám bệnh' },
-            'th-1-4': { pct: 20, label: '🔥 RẤT CAO - Khớp cả Dây cáp lẫn Máy bơm' },
-            'th-1-2': { pct: 15, label: '⚡ KHÁ CAO - Bài thực hành CH1-06' },
-            'th-1-3': { pct: 12, label: '⚡ KHÁ CAO - Hai con trỏ tổng' },
-            'th-1-5': { pct: 8,  label: '📌 DỰ PHÒNG' },
-            'th-1-9': { pct: 4,  label: '📌 DỰ PHÒNG QUAN TRỌNG' },
-            'th-1-6': { pct: 3,  label: '📌 DỰ PHÒNG' },
-            'th-1-7': { pct: 2,  label: '📌 DỰ PHÒNG' },
-            'th-1-8': { pct: 1,  label: '📌 DỰ PHÒNG' },
+            'th-1-1': {
+                pct: 35,
+                label: '🔥 RẤT CAO - Giống 100% Ghép thanh gỗ & Xếp nhóm khám bệnh',
+                repo: 'Y HỆT 100% bài "Ghép thanh gỗ thành bộ" (ảnh đề thi) và bài "Xếp nhóm khám bệnh" (file de.pdf - bai2.cpp).'
+            },
+            'th-1-4': {
+                pct: 20,
+                label: '🔥 RẤT CAO - Khớp cả Dây cáp lẫn Máy bơm',
+                repo: 'Biến thể trực tiếp từ bài "Ghép thanh gỗ thành bộ" kết hợp tư duy Tham lam Chương 3 (Mục 3.1 - Sắp xếp + 1 vòng lặp).'
+            },
+            'th-1-2': {
+                pct: 15,
+                label: '⚡ KHÁ CAO - Bài thực hành CH1-06',
+                repo: 'Y HỆT 100% bài thực hành "CH1-06: Đếm cặp chênh lệch đúng k" (th_1_3.docx & chuong13_th.pdf Bài 7, Slide 92 Chương 1).'
+            },
+            'th-1-3': {
+                pct: 12,
+                label: '⚡ KHÁ CAO - Hai con trỏ tổng',
+                repo: 'Biến thể đổi dấu từ hiệu (|a[i] - a[j]| <= D) sang tổng (a[i] + a[j] >= K) của bài "Xếp nhóm khám bệnh" (de.pdf).'
+            },
+            'th-1-5': {
+                pct: 8,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Biến thể ghép cặp 2 mảng dùng kỹ thuật Sắp xếp + Hai con trỏ (Chương 1 & Chương 3).'
+            },
+            'th-1-9': {
+                pct: 4,
+                label: '📌 DỰ PHÒNG QUAN TRỌNG',
+                repo: 'Biến thể tham lam chia đều N/2 cặp (tương tự ràng buộc N/2 của bài "Chuyển hàng" trong de.pdf).'
+            },
+            'th-1-6': {
+                pct: 3,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Y HỆT 100% thuật toán gộp 2 phần tử nhỏ nhất bằng Min-Heap của bài "CH3-09: Mã hoá Huffman" (th_1_3.docx & Slide 75 Chương 1).'
+            },
+            'th-1-7': {
+                pct: 2,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Y HỆT 100% bài thực hành "CH4-01: Sắp xếp trộn và đếm nghịch thế" (th_1_3.docx, th_4_6.docx & Slide 41 Chương 4).'
+            },
+            'th-1-8': {
+                pct: 1,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Tab 1 Y HỆT 100% bài "CH1-08: Chọn k số chênh lệch tối thiểu" (chuong13_th.pdf Bài 8); Tab 2 Y HỆT 100% bài "Cắt dây" (de.pdf) & "CH4-07: Cắt ván" (th_4_6.docx).'
+            },
 
             // TRANG 2 (Câu 2 - 3.0đ)
-            'th-2-1': { pct: 45, label: '🔥 RẤT CAO - Khớp tuyệt đối cả 2 ca và mốc N ≤ 18 / N ≤ 2000' },
-            'th-2-4': { pct: 16, label: '🔥 RẤT CAO - Quay lui N ≤ 18 & QHĐ N ≤ 2000' },
-            'th-2-8': { pct: 12, label: '⚡ KHÁ CAO - Bài Chuyển hàng trong de.pdf' },
-            'th-2-2': { pct: 10, label: '⚡ KHÁ CAO' },
-            'th-2-3': { pct: 7,  label: '📌 DỰ PHÒNG' },
-            'th-2-7': { pct: 5,  label: '📌 DỰ PHÒNG QUAN TRỌNG - Slide 11 Chương 5' },
-            'th-2-5': { pct: 3,  label: '📌 DỰ PHÒNG' },
-            'th-2-6': { pct: 2,  label: '📌 DỰ PHÒNG' },
+            'th-2-1': {
+                pct: 38,
+                label: '🔥 RẤT CAO - Khớp tuyệt đối cả 2 ca và mốc N ≤ 18 / N ≤ 2000',
+                repo: 'Y HỆT 100% bài "Dãy con tăng dài nhất (LIS) & Tháp Babylon" (Slide 17-20, 46 Chương 5) kết hợp khung Quay lui nhị phân 2^N (Slide 32-35 Chương 2).'
+            },
+            'th-2-4': {
+                pct: 12,
+                label: '🔥 RẤT CAO - Quay lui N ≤ 18 & QHĐ N ≤ 2000',
+                repo: 'Y HỆT 100% bài "CH2-04: Bài toán Ba lô" (chuong13_th.pdf Bài 4, Slide 61-62 Chương 2) và "CH5-05: Cái túi 0-1 kèm truy vết" (th_4_6.docx, Slide 31-35 Chương 5).'
+            },
+            'th-2-9': {
+                pct: 10,
+                label: '⚡ KHÁ CAO - Bản sao Bài 1 Đề Kiểm tra 2 (Cắt thanh kim loại)',
+                repo: 'Y HỆT 100% "Bài 1: Cắt thanh kim loại" (Đề Kiểm tra 2) và bài "Cái túi không giới hạn" (Slide 34 & Bài 10 Slide 55 Chương 5).'
+            },
+            'th-2-2': {
+                pct: 10,
+                label: '⚡ KHÁ CAO - Đường đi dài nhất trên DAG',
+                repo: 'Kết hợp bài "CH6-06: Xếp lịch học môn tiên quyết (DAG Topo)" (th_4_6.docx, Slide 29-32 Chương 6) và "Đệ quy có nhớ" (Mục 2.2 Chương 2 & Mục 5.1 Chương 5).'
+            },
+            'th-2-10': {
+                pct: 10,
+                label: '⚡ KHÁ CAO - Bản sao Bài 2 Đề Kiểm tra 2 (Đổi tuyến ≤ K lần)',
+                repo: 'Y HỆT 100% "Bài 2: Tuyến xe buýt ít đổi tuyến" (Đề Kiểm tra 2) kết hợp thuật toán đường đi ngắn nhất Chương 6.'
+            },
+            'th-2-8': {
+                pct: 10,
+                label: '⚡ KHÁ CAO - Bài Chuyển hàng trong de.pdf & CH2-05',
+                repo: 'Y HỆT 100% bài "CH2-05: Chia dãy thành hai nhóm" (th_1_3.docx, chuong13_th.pdf Bài 7, Slide 34-35 Chương 2) và bài "Chuyển hàng" (de.pdf - chuyen_hang.cpp).'
+            },
+            'th-2-3': {
+                pct: 4,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Giống cấu trúc duyệt DFS/BFS từ mọi đỉnh O(N(N+M)) ở Mục 6.2, 6.4, 6.7 trong Slide Chương 6 (CSE426_Chuong6.pptx Slide 17, 26, 39).'
+            },
+            'th-2-7': {
+                pct: 3,
+                label: '📌 DỰ PHÒNG QUAN TRỌNG - Slide 11 Chương 5',
+                repo: 'Y HỆT 100% bài bắt buộc số 1 Chương 5: "Chuỗi con chung dài nhất (LCS)" (CSE426_Chuong5.pptx Mục 5.2 Slide 11-15 & Slide 40).'
+            },
+            'th-2-5': {
+                pct: 2,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Tab 1 Y HỆT 100% bài "CH5-03: Robot trên lưới ô vuông" (th_4_6.docx, Slide 48-49 Chương 5); Tab 2 giống "CH5-08: Đếm đường đi trên lưới" (th_4_6.docx).'
+            },
+            'th-2-6': {
+                pct: 1,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Y HỆT 100% bài bắt buộc số 4 Chương 5: "Tập con độc lập lớn nhất của cây" (CSE426_Chuong5.pptx Mục 5.5 Slide 26-29 & Slide 41).'
+            },
 
             // TRANG 3 (Câu 3 - 2.0đ)
-            'th-3-1': { pct: 38, label: '🔥 RẤT CAO - Khớp hoàn hảo cả 2 ca và 2 mốc N' },
-            'th-3-2': { pct: 28, label: '🔥 RẤT CAO - Bài thực hành CH5-01' },
-            'th-3-7': { pct: 12, label: '⚡ KHÁ CAO - Bài thực hành CH1-08 & CH1-03' },
-            'th-3-3': { pct: 8,  label: '📌 DỰ PHÒNG' },
-            'th-3-4': { pct: 6,  label: '📌 DỰ PHÒNG - Bài Phòng thu trong de.pdf' },
-            'th-3-6': { pct: 5,  label: '📌 DỰ PHÒNG' },
-            'th-3-5': { pct: 3,  label: '📌 DỰ PHÒNG' }
+            'th-3-1': {
+                pct: 38,
+                label: '🔥 RẤT CAO - Khớp hoàn hảo cả 2 ca và 2 mốc N',
+                repo: 'Y HỆT 100% bài thực hành "CH4-01: Sắp xếp trộn và đếm nghịch thế" (th_1_3.docx, th_4_6.docx & Bài 5 Slide 41 Chương 4).'
+            },
+            'th-3-2': {
+                pct: 28,
+                label: '🔥 RẤT CAO - Bài thực hành CH5-01',
+                repo: 'Y HỆT 100% bài thực hành "CH5-01: Dãy con không giảm dài nhất O(N log N)" (th_4_6.docx & Bài 6 Slide 53 Chương 5).'
+            },
+            'th-3-7': {
+                pct: 12,
+                label: '⚡ KHÁ CAO - Bài thực hành CH1-08 & CH1-03',
+                repo: 'Y HỆT 100% bài "CH1-08: Chọn k số chênh lệch tối thiểu" (chuong13_th.pdf Bài 8, th_1_3.docx) và "CH1-03: Phần tử nhỏ thứ K" (chuong13_th.pdf Bài 6).'
+            },
+            'th-3-3': {
+                pct: 8,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Tab 1 Y HỆT 100% bài "CH3-08: Số phòng họp ít nhất" (th_1_3.docx); Tab 2 Y HỆT 100% bài "CH3-02: Lập lịch phòng họp" (chuong13_th.pdf Bài 3, Slide 22-27 Chương 3).'
+            },
+            'th-3-4': {
+                pct: 6,
+                label: '📌 DỰ PHÒNG - Bài Phòng thu trong de.pdf',
+                repo: 'Y HỆT 100% bài "Phòng thu nhận bản thu" (de.pdf - phong_thu.cpp) và "CH3-03: Lập lịch tác vụ có deadline" (th_1_3.docx, chuong13_th.pdf Bài 6).'
+            },
+            'th-3-6': {
+                pct: 5,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Tab 1 Y HỆT 100% bài mở đầu Chương 1 "Đoạn con có tổng lớn nhất (Kadane)" (Slide 22-40 Chương 1, Slide 44-45 Chương 5); Tab 2 Y HỆT 100% "CH3-07: Ghép xâu thành số lớn nhất" (chuong13_th.pdf Bài 5).'
+            },
+            'th-3-5': {
+                pct: 3,
+                label: '📌 DỰ PHÒNG',
+                repo: 'Ứng dụng trực tiếp cấu trúc Ngăn xếp (Stack LIFO) ở Mục 1.5 - 1.6 Chương 1 (cùng nhóm với bài "CH1-04: Kiểm tra biểu thức dấu ngoặc").'
+            }
         };
 
         function getProbTier(pct) {
@@ -5623,21 +6145,21 @@ int main() {
             return { cardCls: 'prob-chance-low', pillCls: 'pill-prob-low' };
         }
 
-        // Tự động gắn Huy hiệu % khả năng gặp kèm Progress Bar lên đầu mỗi Problem Card
+        // Tự động gắn Huy hiệu % khả năng gặp kèm Progress Bar và Hộp đối chiếu kho tài liệu lên đầu mỗi Problem Card
         function initProbabilityBadges() {
             document.querySelectorAll('.page-section').forEach(sec => {
                 sec.querySelectorAll('.problem-card').forEach((card, idx) => {
                     if (!card.dataset.origIndex) {
                         card.dataset.origIndex = idx;
                     }
-                    const stat = PROB_STATS[card.id] || { pct: 1, label: '📌 DỰ PHÒNG' };
+                    const stat = PROB_STATS[card.id] || { pct: 1, label: '📌 DỰ PHÒNG', repo: '' };
                     card.dataset.prob = stat.pct;
 
-                    if (!card.querySelector('.prob-chance-banner')) {
+                    let banner = card.querySelector('.prob-chance-banner');
+                    if (!banner) {
                         const tier = getProbTier(stat.pct);
-                        const banner = document.createElement('div');
+                        banner = document.createElement('div');
                         banner.className = `prob-chance-banner ${tier.cardCls}`;
-                        // Nhân tỷ lệ hiển thị thanh progress bar (tối đa 45% -> ~95% độ rộng thanh để trực quan)
                         const barWidth = Math.min(100, Math.max(8, Math.round(stat.pct * 2.1)));
                         banner.innerHTML = `
                             <div class="prob-chance-left">
@@ -5654,6 +6176,13 @@ int main() {
                         } else {
                             card.prepend(banner);
                         }
+                    }
+
+                    if (stat.repo && !card.querySelector('.prob-repo-note')) {
+                        const repoBox = document.createElement('div');
+                        repoBox.className = 'prob-repo-note';
+                        repoBox.innerHTML = `<strong>📂 Đối chiếu kho tài liệu của tôi:</strong> ${stat.repo}`;
+                        banner.insertAdjacentElement('afterend', repoBox);
                     }
                 });
             });
